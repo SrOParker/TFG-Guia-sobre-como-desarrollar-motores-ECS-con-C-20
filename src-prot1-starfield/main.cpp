@@ -8,9 +8,10 @@ struct PhysicCMP{
     int x, y;
     int vx;
     PhysicCMP(){
-        srand(time(NULL));
-        x = 1 + rand() % (31 - 1);
-        y = 1 + rand() % (11 - 1);
+        //srand(time(NULL));
+        x = rand()%4;
+        y = rand()%10; //entre 0 y 9
+        vx = 1+ (rand()%5); //entre 1 y 4
     }
 };
 
@@ -20,7 +21,7 @@ struct RenderCMP{
     
     RenderCMP(){
         pos_to_draw =0 ;
-        sprite = 'o';
+        sprite = '*';
     }
 };
 
@@ -34,11 +35,12 @@ struct EntityManagerP1
 {
     using PointerToFunction = void(*)(Entity&);
 
+    /// matrix   y -> 0 9    --    x -> 0 29
     EntityManagerP1(std::size_t size_for_entities = 10){
         entities.reserve(size_for_entities);
         for(int i=0; i<10; i++){
             map.emplace_back();
-            for (int j=0; j<30; j++){
+            for (int j=0; j<100; j++){
                 map[i].push_back(' ');
             }
         }
@@ -74,8 +76,12 @@ struct EntityManagerP1
 
 struct PhysicsSystem{
     void update(EntityManagerP1& EM){
-        EM.forall([](Entity&e){
+        EM.forall([&](Entity&e){
             e.phy.x += e.phy.vx;
+            if(e.phy.x > 99){
+                e.phy.x = 0;
+                
+            }
         });
     }
 };
@@ -95,13 +101,15 @@ struct RenderSystem{
 
     void draw(EntityManagerP1& EM){
         
-        std::cout<< "--STARFIELD--";
+        std::cout<< "--STARFIELD--\n ";
+        std::cout<< "----------------------------------------------------------------------------------------------------\n";
         for(int i=0; i< EM.getMap().size(); i++){
+            std::cout << "|";
             for (int j=0; j<EM.getMap()[0].size(); j++){
                 std::cout<< EM.getMap()[i][j];
-            }std::cout << "\n";
+            }std::cout << "|\n";
         }
-        std::cout<< "-------------";
+        std::cout<< "-----------------------------------------------------------------------------------------------------\n";
     }
 };
 
@@ -114,32 +122,42 @@ struct Game {
         RenderSystem system_rend{};
         TERM::Terminal_t drawer{};
         bool running = true;
-    
+        int timer = 100;
         while(running){
-            man.clearMap();
-            system_phy.update(man);
-            system_rend.update(man);
             
-            //PressKey(player, running, terminal_drawer);
+            man.clearMap();
+            
+            if (timer == 0){
+                system_phy.update(man);
+                
+                if(man.getEntityVector().size()<40){
+                    man.createEntity();
+                }
+
+                timer = 100;
+            } timer--;
+
+            
+            
+            system_rend.update(man);
+           
             pressKey(running, drawer);
 
             std::cout<< "\033[H\033[J";
-            //man.getMap().clear(); 
-            //terminal_drawer.clearBuffer();
-
+           
         }
     }
     void pressKey(bool& running, TERM::Terminal_t& drawer){
-        int tecla = drawer.wait4NextKeyPress();
+        bool tecla = drawer.isKeyPressed();
         
         switch(tecla){
-            case 32: // space
-                break;
-            case 27: //escape
+            case true: //escape
                 //close game
                 running = false;
                 break;
-        }
+            case false:
+                break;
+        }  
     }
 };
 int main(){
