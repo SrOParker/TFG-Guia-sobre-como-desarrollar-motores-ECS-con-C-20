@@ -98,7 +98,9 @@ struct RenderSystem{
     
     void update(EntityManager& EM, int score){
         //no hace falta el forall por que solo tenemos que pintar el mapa en este caso
-        std::cout<<"------FIREFIGHTER GAME------ SCORE: "<< score << "\n";
+        std::cout << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_White <<"m------FIREFIGHTER GAME------ \033["<< TERM::BG_Default <<"m\n";
+        
+        //std::cout<<"SCORE: "<< score << "\n";
         auto& player = EM.getEntityVector()[0];
         for(int i=0; i < EM.getEntityVector().size() - 1 ; i++){
             if(player.movement.yPos==i){
@@ -106,20 +108,22 @@ struct RenderSystem{
             }else{
                 std::cout<< " ";
             }
-            std::cout<< "|";
+            std::cout<< "\033["<< TERM::AT_Bold <<";"<< TERM::FG_White <<"m|";
             int room_size =10;
             for(int j=0; j < EM.getEntityVector()[i+1].room.fire;j++){
-                std::cout<< EM.getEntityVector()[i+1].render.sprite;
+                std::cout<< "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Red <<"m"<< EM.getEntityVector()[i+1].render.sprite;
+                
                 room_size--;
             }
             for(int j=0; j<room_size;j++){
                 std::cout<< " ";
             }
             room_size = 10;
-            std::cout<< "|\n";
+            std::cout<< "\033["<< TERM::AT_Bold <<";"<< TERM::FG_White <<"m|\n";
         }
-        std::cout<<"----------------------------\n";
-        std::cout <<" W - UP | S - DOWN | SPACE - CLEAR  ROOM | ESC - CLOSE GAME \n";
+        std::cout<< "\033["<< TERM::AT_Bold <<";"<< TERM::FG_White <<"m----------------------------\n";
+        std::cout << "\033["<< TERM::AT_Default <<";"<< TERM::FG_Magenta <<"mSCORE:" << score <<  "\n";
+        std::cout <<"CONTROLS: W - UP | S - DOWN | SPACE - CLEAR  ROOM | ESC - CLOSE GAME \n";
     }
 };
 
