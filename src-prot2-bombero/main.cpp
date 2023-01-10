@@ -112,7 +112,6 @@ struct RenderSystem{
             int room_size =10;
             for(int j=0; j < EM.getEntityVector()[i+1].room.fire;j++){
                 std::cout<< "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Red <<"m"<< EM.getEntityVector()[i+1].render.sprite;
-                
                 room_size--;
             }
             for(int j=0; j<room_size;j++){

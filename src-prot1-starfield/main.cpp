@@ -35,7 +35,7 @@ struct EntityManagerP1
 {
     using PointerToFunction = void(*)(Entity&);
 
-    /// matrix   y -> 0 9    --    x -> 0 29
+    /// matrix   y -> 0 9    --    x -> 0 99
     EntityManagerP1(std::size_t size_for_entities = 10){
         entities.reserve(size_for_entities);
         for(int i=0; i<10; i++){
@@ -100,16 +100,17 @@ struct RenderSystem{
     private:
 
     void draw(EntityManagerP1& EM){
-        
-        std::cout<< "--STARFIELD--\n ";
+        std::cout << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Magenta <<"m--STARFIELD-- \033["<< TERM::BG_Default <<"m\n";
         std::cout<< "----------------------------------------------------------------------------------------------------\n";
         for(int i=0; i< EM.getMap().size(); i++){
-            std::cout << "|";
+            std::cout << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Magenta <<"m|";
             for (int j=0; j<EM.getMap()[0].size(); j++){
-                std::cout<< EM.getMap()[i][j];
-            }std::cout << "|\n";
+                std::cout << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Cyan <<"m"<< EM.getMap()[i][j];
+                //std::cout<< EM.getMap()[i][j];
+            }std::cout << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Magenta <<"m|\n";
         }
-        std::cout<< "-----------------------------------------------------------------------------------------------------\n";
+        std::cout << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Magenta <<"m-----------------------------------------------------------------------------------------------------\n";
+        
     }
 };
 
@@ -122,24 +123,24 @@ struct Game {
         RenderSystem system_rend{};
         TERM::Terminal_t drawer{};
         bool running = true;
-        int timer = 100;
+        int timer = 150;
         while(running){
             
             man.clearMap();
             
             if (timer == 0){
                 system_phy.update(man);
-                
+                system_rend.update(man);
                 if(man.getEntityVector().size()<40){
                     man.createEntity();
                 }
-
-                timer = 100;
+                
+                timer = 150;
             } timer--;
 
+
             
             
-            system_rend.update(man);
            
             pressKey(running, drawer);
 
@@ -164,9 +165,6 @@ int main(){
     EntityManagerP1 manager;
     Game game{};
 
-    for (int i =0; i<10; i++){
-        manager.createEntity();
-    }
     game.run_game(manager);
     return 0;
 }
