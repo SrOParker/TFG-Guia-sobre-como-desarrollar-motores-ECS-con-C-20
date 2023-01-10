@@ -4,25 +4,29 @@
 //libreria uso de terminal de Francisco Gallego
 #include "../libs/bltl/src/terminalhelper.hpp"
 
-struct Cmp_Physics{
-    float y{};
-    float vy{};
+struct RenderComponent{
+    const char* sprite;
+    bool isARoom = false;
 };
+struct RoomComponent{
 
-struct Cmp_Render{
-    char c{};
-    int pos_to_draw{};
+    int position;
+    int fire;
+};
+struct MovementComponent{
+    int yPos;
 };
 
 struct Entity{
-    Cmp_Physics physics;
-    Cmp_Render render;
+    RenderComponent render;
+    RoomComponent room;
+    MovementComponent movement;
 };
 
 
-template <typename Type>
+
 struct EntityManager{
-    using PointerToFunction = void(*)(Type&);
+    //using PointerToFunction = void(*)(Entity&);
 
     EntityManager(std::size_t size_for_entities = 10){
         entities.reserve(size_for_entities);
@@ -31,118 +35,152 @@ struct EntityManager{
     auto& createEntity(){ return entities.emplace_back();}
 
 
-    void forall(PointerToFunction function){
+    void forall(auto&& function){
         for(auto&e:entities){
             function(e);
         }
     }
+    std::vector<Entity>& getEntityVector(){
+        return entities;
+    }
     private:    
-    std::vector<Type>  entities;
+    std::vector<Entity>  entities;
 };
 
-struct PhysicsSystem{
-    void update(EntityManager<Entity>& EM){
-        EM.forall(update_one_entity);
-    }
-    
-    private:
-    static void update_one_entity(Entity& e){
-        e.physics.y += e.physics.vy;
-    }
-
-};
-struct RenderSystem{
-    
-    void update(EntityManager<Entity>& EM, Entity& player){
-        
-        EM.forall([](Entity&e){
-            e.render.pos_to_draw = e.physics.y;
+struct MovementSystem{
+    void update(EntityManager& EM, bool& running, TERM::Terminal_t& drawer, int& score){
+        EM.forall([&](Entity&e){
+            if(e.render.isARoom == false){
+                PressKey(EM, running, drawer, score);
+            }
         });
 
-        drawMap(player);
     }
-
     private:
-    void drawMap(Entity& player){
-        std::cout << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Red <<"m---------B GAME---------\033["<< TERM::BG_White <<"m\n";
-        //std::cout << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Red <<"mbold red text\n";
-        int size_of_building = 4;
-        int size_of_rooms=10;
-        for(int i=0; i < size_of_building;i++){
-            if(i == player.physics.y){
-                //std::cout<< player.render.c;
-                std::cout << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Green <<"m"<< player.render.c;
+    void PressKey(EntityManager& EM, bool& running, TERM::Terminal_t& drawer, int& score){
+        int tecla = drawer.wait4NextKeyPress();
+        auto& player = EM.getEntityVector()[0];
+        switch(tecla){
+            case 119: // up w
+                if(player.movement.yPos != 0){
+                    player.movement.yPos -=1;
+                    for(int i =0 ;i < 2; i++){
+                        int roomRand = rand()%6;
+                        EM.getEntityVector()[1+roomRand].room.fire += 1;
+                        
+                    }
+                    
+                    
+                }
+                break;
+            case 115: // down s
+                if(player.movement.yPos != 5){
+                    player.movement.yPos +=1;
+                    for(int i =0 ;i < 2; i++){
+                        int roomRand = rand()%6;
+                        EM.getEntityVector()[1+roomRand].room.fire += 1;
+                    }
+                }
+                break;
+            case 32:  // borrar fuego space
+                score += EM.getEntityVector()[1+player.movement.yPos].room.fire;
+                EM.getEntityVector()[1+player.movement.yPos].room.fire = 0;
+                
+                break;
+            case 27: //close game ESC
+                running = false;
+                break;
+        }
+    }
+};
+
+struct RenderSystem{
+    
+    void update(EntityManager& EM, int score){
+        //no hace falta el forall por que solo tenemos que pintar el mapa en este caso
+        std::cout<<"------FIREFIGHTER GAME------ SCORE: "<< score << "\n";
+        auto& player = EM.getEntityVector()[0];
+        for(int i=0; i < EM.getEntityVector().size() - 1 ; i++){
+            if(player.movement.yPos==i){
+                std::cout<< player.render.sprite;
             }else{
                 std::cout<< " ";
             }
-            //std::cout<< "|";
-            std::cout << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Blue <<"m|";
-            for (int j = 0; j < size_of_rooms;j++){
+            std::cout<< "|";
+            int room_size =10;
+            for(int j=0; j < EM.getEntityVector()[i+1].room.fire;j++){
+                std::cout<< EM.getEntityVector()[i+1].render.sprite;
+                room_size--;
+            }
+            for(int j=0; j<room_size;j++){
                 std::cout<< " ";
             }
-            std::cout << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Blue <<"m|\n";
+            room_size = 10;
+            std::cout<< "|\n";
         }
+        std::cout<<"----------------------------\n";
+        std::cout <<" W - UP | S - DOWN | SPACE - CLEAR  ROOM | ESC - CLOSE GAME \n";
     }
-
-    
 };
 
 
 
-void PressKey(Entity& player, bool& running, TERM::Terminal_t& drawer){
-    int tecla = drawer.wait4NextKeyPress();
-    
-    switch(tecla){
-        case 119: // up
-            if (player.physics.y>0){
-                player.physics.vy = -1;
-            }else{
-                player.physics.vy = 0;
-            }
-            break;
-        case 115: // down
-            if (player.physics.y<3){
-                player.physics.vy = 1;
-            }else{
-                player.physics.vy = 0;
-            }
-            break;
-        case 13:
-            //borrar fuego
-            break;
-    }
 
+
+
+void createEntitiesForFirefighterGame(EntityManager& manager){
+    auto& player = manager.createEntity();
+    player.render.sprite="B";
+
+    for(int i=0; i < 6; i++){
+        auto& room_ENTITY = manager.createEntity();
+        room_ENTITY.room.fire= rand()%3;
+        room_ENTITY.room.position = i;
+        room_ENTITY.render.isARoom = true;
+        room_ENTITY.render.sprite= "~";
+    }
+}
+bool checkRooms(EntityManager& manager, bool& running){
+    for(int i =0 ; i<manager.getEntityVector().size()-1;i++){
+        if(manager.getEntityVector()[i+1].room.fire > 9){
+            running = false;   
+            return true; 
+        }
+    }
+    return false;
 
 }
-
-void game(EntityManager<Entity>& manager){
-    PhysicsSystem phySys;
+void game(EntityManager& manager){
+    MovementSystem movSys;
     RenderSystem rendSys;
     TERM::Terminal_t terminal_drawer{};
+    int score=0;
 
-    auto& player = manager.createEntity();
-    player.render.c='B';
-
+    createEntitiesForFirefighterGame(manager);
     bool running = true;
     
     while(running){
-
-        phySys.update(manager);
-        rendSys.update(manager, player);
+        if(checkRooms(manager, running)){
+            break;
+        }
         
-        PressKey(player, running, terminal_drawer);
+        rendSys.update(manager, score);
+        movSys.update(manager, running, terminal_drawer, score);
+        //PressKey(player, running, terminal_drawer);
         
-
+        
         std::cout<< "\033[H\033[J"; 
-        //terminal_drawer.clearBuffer();
 
     }
+    
+    rendSys.update(manager, score);
+    std::cout<<"YOU LOSE, YOUR SCORE IS "<< score <<"\n"; 
 }
 
 
 
 int main(){
-    EntityManager<Entity> manager;
+    EntityManager manager;
     
     game(manager);
     return 0;
