@@ -69,8 +69,6 @@ struct MovementSystem{
                         EM.getEntityVector()[1+roomRand].room.fire += 1;
                         
                     }
-                    
-                    
                 }
                 break;
             case 115: // down s
@@ -85,7 +83,6 @@ struct MovementSystem{
             case 32:  // borrar fuego space
                 score += EM.getEntityVector()[1+player.movement.yPos].room.fire;
                 EM.getEntityVector()[1+player.movement.yPos].room.fire = 0;
-                
                 break;
             case 27: //close game ESC
                 running = false;
@@ -131,61 +128,62 @@ struct RenderSystem{
 
 
 
-void createEntitiesForFirefighterGame(EntityManager& manager){
-    auto& player = manager.createEntity();
-    player.render.sprite="B";
+struct Game{
+    void run(EntityManager& manager){
+        MovementSystem movSys;
+        RenderSystem rendSys;
+        TERM::Terminal_t terminal_drawer{};
+        int score=0;
 
-    for(int i=0; i < 6; i++){
-        auto& room_ENTITY = manager.createEntity();
-        room_ENTITY.room.fire= rand()%3;
-        room_ENTITY.room.position = i;
-        room_ENTITY.render.isARoom = true;
-        room_ENTITY.render.sprite= "~";
-    }
-}
-bool checkRooms(EntityManager& manager, bool& running){
-    for(int i =0 ; i<manager.getEntityVector().size()-1;i++){
-        if(manager.getEntityVector()[i+1].room.fire > 9){
-            running = false;   
-            return true; 
-        }
-    }
-    return false;
+        createEntitiesForFirefighterGame(manager);
+        bool running = true;
+        
+        while(running){
+            if(checkRooms(manager, running)){
+                break;
+            }
+            
+            rendSys.update(manager, score);
+            movSys.update(manager, running, terminal_drawer, score);
 
-}
-void game(EntityManager& manager){
-    MovementSystem movSys;
-    RenderSystem rendSys;
-    TERM::Terminal_t terminal_drawer{};
-    int score=0;
-
-    createEntitiesForFirefighterGame(manager);
-    bool running = true;
-    
-    while(running){
-        if(checkRooms(manager, running)){
-            break;
+            std::cout<< "\033[H\033[J"; 
         }
         
         rendSys.update(manager, score);
-        movSys.update(manager, running, terminal_drawer, score);
-        //PressKey(player, running, terminal_drawer);
-        
-        
-        std::cout<< "\033[H\033[J"; 
+        std::cout<<"YOU LOSE, YOUR SCORE IS "<< score <<"\n"; 
+    }
+
+
+    void createEntitiesForFirefighterGame(EntityManager& manager){
+        auto& player = manager.createEntity();
+        player.render.sprite="B";
+
+        for(int i=0; i < 6; i++){
+            auto& room_ENTITY = manager.createEntity();
+            room_ENTITY.room.fire= rand()%3;
+            room_ENTITY.room.position = i;
+            room_ENTITY.render.isARoom = true;
+            room_ENTITY.render.sprite= "~";
+        }
+    }
+    bool checkRooms(EntityManager& manager, bool& running){
+        for(int i =0 ; i<manager.getEntityVector().size()-1;i++){
+            if(manager.getEntityVector()[i+1].room.fire > 9){
+                running = false;   
+                return true; 
+            }
+        }
+        return false;
 
     }
-    
-    rendSys.update(manager, score);
-    std::cout<<"YOU LOSE, YOUR SCORE IS "<< score <<"\n"; 
-}
 
-
+};
 
 int main(){
     EntityManager manager;
+    Game game;
     
-    game(manager);
+    game.run(manager);
     return 0;
 }
 

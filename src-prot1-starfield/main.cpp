@@ -16,13 +16,8 @@ struct PhysicCMP{
 };
 
 struct RenderCMP{
-    char    sprite{};
-    int     pos_to_draw{};
+    char    sprite{'*'};
     
-    RenderCMP(){
-        pos_to_draw =0 ;
-        sprite = '*';
-    }
 };
 
 struct Entity{
@@ -89,8 +84,7 @@ struct RenderSystem{
     void update(EntityManagerP1& EM){
     
         EM.forall([&](Entity&e){
-            e.rend.pos_to_draw = e.phy.y;
-            EM.getMap()[e.rend.pos_to_draw][e.phy.x] = e.rend.sprite;
+            EM.getMap()[e.phy.y][e.phy.x] = e.rend.sprite;
             
         });
         
