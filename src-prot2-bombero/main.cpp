@@ -6,7 +6,6 @@
 
 struct RenderComponent{
     const char* sprite;
-    bool isARoom = false;
 };
 struct RoomComponent{
 
@@ -21,6 +20,7 @@ struct Entity{
     RenderComponent render;
     RoomComponent room;
     MovementComponent movement;
+    bool rendCMP, roomCMP, movementCMP = false;
 };
 
 
@@ -31,10 +31,7 @@ struct EntityManager{
     EntityManager(std::size_t size_for_entities = 10){
         entities.reserve(size_for_entities);
     }
-    
     auto& createEntity(){ return entities.emplace_back();}
-
-
     void forall(auto&& function){
         for(auto&e:entities){
             function(e);
@@ -50,7 +47,7 @@ struct EntityManager{
 struct MovementSystem{
     void update(EntityManager& EM, bool& running, TERM::Terminal_t& drawer, int& score){
         EM.forall([&](Entity&e){
-            if(e.render.isARoom == false){
+            if(e.movementCMP == true){
                 PressKey(EM, running, drawer, score);
             }
         });
@@ -129,17 +126,18 @@ struct RenderSystem{
 
 
 struct Game{
-    void run(EntityManager& manager){
+
+    void run(){
         MovementSystem movSys;
         RenderSystem rendSys;
         TERM::Terminal_t terminal_drawer{};
         int score=0;
 
-        createEntitiesForFirefighterGame(manager);
+        createEntitiesForFirefighterGame();
         bool running = true;
         
         while(running){
-            if(checkRooms(manager, running)){
+            if(checkRooms(running)){
                 break;
             }
             
@@ -153,20 +151,25 @@ struct Game{
         std::cout<<"YOU LOSE, YOUR SCORE IS "<< score <<"\n"; 
     }
 
+    private:
 
-    void createEntitiesForFirefighterGame(EntityManager& manager){
+    void createEntitiesForFirefighterGame(){
         auto& player = manager.createEntity();
         player.render.sprite="B";
+        player.rendCMP = true;
+        player.movementCMP = true;
 
         for(int i=0; i < 6; i++){
             auto& room_ENTITY = manager.createEntity();
             room_ENTITY.room.fire= rand()%3;
             room_ENTITY.room.position = i;
-            room_ENTITY.render.isARoom = true;
             room_ENTITY.render.sprite= "~";
+            room_ENTITY.roomCMP = true;
+            room_ENTITY.rendCMP = true;
         }
+
     }
-    bool checkRooms(EntityManager& manager, bool& running){
+    bool checkRooms(bool& running){
         for(int i =0 ; i<manager.getEntityVector().size()-1;i++){
             if(manager.getEntityVector()[i+1].room.fire > 9){
                 running = false;   
@@ -177,13 +180,15 @@ struct Game{
 
     }
 
+    EntityManager manager;
+
 };
 
 int main(){
-    EntityManager manager;
+    
     Game game;
     
-    game.run(manager);
+    game.run();
     return 0;
 }
 
