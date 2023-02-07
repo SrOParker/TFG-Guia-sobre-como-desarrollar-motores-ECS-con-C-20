@@ -66,7 +66,10 @@ struct PhysicsSystem{
 struct RenderSystem{
     void update(EntityManagerP1& EM){
         EM.forall([&](Entity&e){
-            std::cout <<"\033["<< e.phy.y <<";"<< e.phy.x<<"f" << "\033["<< TERM::AT_Bold <<";"<< TERM::FG_Cyan <<"m"<< e.rend.sprite;
+            std::cout <<"\033["<< e.phy.y <<";"<< e.phy.x<<"f" ;
+            std::cout << "\033["<< TERM::AT_Bold <<";"
+                      << TERM::FG_Cyan <<"m";
+            std::cout << e.rend.sprite;
         });
     }
 };
