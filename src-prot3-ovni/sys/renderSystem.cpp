@@ -19,14 +19,32 @@ void RenderSystem::update(EntityManager& EM, float score){
     });
 
     //draw text
-    printText(score);
+    printScore(score);
 }
 
-void RenderSystem::printText(float score){
+void RenderSystem::printScore(float score){
     //draw text
     std::ostringstream stream;
-    stream << std::fixed << std::setprecision(3) << "Puntuación: "<< score << " km";
+    stream << std::fixed << std::setprecision(2) << "Puntuación: "<< score << " m";
     std::string str = stream.str();
     const char* pointsString = str.c_str();
-    DrawText(pointsString, 250,15,fontSize, BLUE);
+    Color color{112,154,209,255};
+    DrawText(pointsString, 450,375,fontSize, color);
+}
+
+void RenderSystem::printRecord(float record){
+    //draw text
+    std::ostringstream stream;
+    stream << std::fixed << std::setprecision(2) << record << " m";
+    std::string str = stream.str();
+    const char* pointsString = str.c_str();
+    DrawText(pointsString, 350,92,fontSize, WHITE);
+}
+
+void RenderSystem::printDifficultySelected(int dif){
+    std::ostringstream stream;
+    stream << dif;
+    std::string str = stream.str();
+    const char* pointsString = str.c_str();
+    DrawText(pointsString, 312,326,fontSize/2, WHITE);
 }

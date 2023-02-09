@@ -3,7 +3,7 @@
     Map::Map(){
         map_x = 0.0f;
         map_y = 0.0f;
-        speed = 4.0f;
+        speed = 0.0f;
     }
 
 

@@ -2,7 +2,9 @@
 struct RenderSystem{
     RenderSystem();
     void update(EntityManager& EM, float score);
-    void printText(float score);
+    void printScore(float score);
+    void printRecord(float record);
+    void printDifficultySelected(int dif);
     private:
     int fontSize;
 };

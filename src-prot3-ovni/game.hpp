@@ -4,41 +4,55 @@
 #include "sys/inputSystem.hpp"
 #include "sys/collisionSystem.hpp"
 #include "map.hpp"
+#include "states.hpp"
 
+#define SPAWN_NUMBER 60
+#define DIFFICULTY_INCREMENT 10
 struct Game{
     Game(){
+        state = States::menu;
         EM =  EntityManager();
         coll_sys = CollisionSystem();
         phy_sys = PhysicSystem();
         rend_sys = RenderSystem();
         inp_sys = InputSystem();
-        spawnRatio=45;
-        spawn = spawnRatio;
         running = true;
         score = 0.0f;
+        record=0.0f;
+        
+        difficulty = 1;
+        spawnRatio=SPAWN_NUMBER - DIFFICULTY_INCREMENT * difficulty;
+        spawn = spawnRatio;
     }
 
     void run(){
-        createPlayer();
-        map.setMapBackground("img/background.png");
+        map.setMapBackground("img/menu.png");
         SetTargetFPS(60);
         while (!WindowShouldClose()){
             BeginDrawing();
             ClearBackground(RAYWHITE);
             map.drawAndMoveMap();
-            if(running){
-
+            switch (state) {
+            case States::menu:
+                chooseDifficulty();
+                rend_sys.printDifficultySelected(difficulty);
+                rend_sys.printRecord(record);
+                goToPlay();
+                break;
+            case States::play:
                 rend_sys.update(EM, score);
                 phy_sys.update(EM);
                 inp_sys.update(EM);
-                coll_sys.update(EM, map, running);
+                coll_sys.update(EM, map, state);
                 enemySpawn();
                 score+= 0.1f;
-            }else{
-                rend_sys.printText(score);
-                replay(map);
+                break;
+            case States::end:
+                rend_sys.printScore(score);
+                goToMenu();
+                break;
             }
-            EndDrawing();
+           EndDrawing();         
         }map.textureCleaner(map.getMapBackground());
     }
     private:
@@ -56,6 +70,10 @@ struct Game{
     int spawn;
     bool running;
     float score;
+    float record;
+    int difficulty;
+    //State of the game
+    States state;
 
     void createPlayer(){
         auto& player = EM.createEntity();
@@ -84,14 +102,40 @@ struct Game{
         
     } 
 
-    void replay(Map& map){
+    void goToMenu(){
+        if(record<score){
+            record = score;
+        }
         if (IsKeyDown(KEY_SPACE)){
             score = 0.0f;
-            running = true;
-            createPlayer();
+            state = States::menu;
+            map.setMapBackground("img/menu.png");
+            spawnRatio = SPAWN_NUMBER;
+        }
 
+    }
+    void goToPlay(){
+        if (IsKeyDown(KEY_ENTER)){
+            score = 0.0f;
+            createPlayer();
             map.setMapSpeed(4.0f);
             map.setMapBackground("img/background.png");
+            state = States::play;
         }
+    }
+    void chooseDifficulty(){
+        if (IsKeyDown(KEY_ONE)){
+            difficulty = 1;
+            spawnRatio = SPAWN_NUMBER -DIFFICULTY_INCREMENT* difficulty;
+        }
+        if (IsKeyDown(KEY_TWO)){
+            difficulty = 2;
+            spawnRatio = SPAWN_NUMBER-DIFFICULTY_INCREMENT* difficulty;
+        }
+        if (IsKeyDown(KEY_THREE)){
+            difficulty = 3;
+            spawnRatio = SPAWN_NUMBER- DIFFICULTY_INCREMENT* difficulty;
+        }
+        
     }
 };
