@@ -3,54 +3,59 @@
 #include "sys/renderSystem.hpp"
 #include "sys/inputSystem.hpp"
 #include "sys/collisionSystem.hpp"
+#include "map.hpp"
 
 struct Game{
+    Game(){
+        EM =  EntityManager();
+        coll_sys = CollisionSystem();
+        phy_sys = PhysicSystem();
+        rend_sys = RenderSystem();
+        inp_sys = InputSystem();
+        spawnRatio=45;
+        spawn = spawnRatio;
+        running = true;
+        score = 0.0f;
+    }
+
     void run(){
         createPlayer();
-        
-        //Map
-        float map_x = 0.0f;
-        float map_y = 0.0f;
-        float speed = 4.0f;
-        Texture2D background = LoadTexture("img/background.png");
-        
+        map.setMapBackground("img/background.png");
         SetTargetFPS(60);
         while (!WindowShouldClose()){
             BeginDrawing();
             ClearBackground(RAYWHITE);
+            map.drawAndMoveMap();
             if(running){
-                drawAndMoveMap(background, map_x, map_y, speed);
-                
+
                 rend_sys.update(EM, score);
                 phy_sys.update(EM);
                 inp_sys.update(EM);
-                coll_sys.update(EM, background, speed, running);
+                coll_sys.update(EM, map, running);
                 enemySpawn();
                 score+= 0.1f;
             }else{
-                map_x=map_y=0;       
-                drawAndMoveMap(background, map_x, map_y, speed); 
                 rend_sys.printText(score);
-                //REPLAY GAME
-                replay(background, speed);
+                replay(map);
             }
             EndDrawing();
-        }
-        textureCleaner(background);
+        }map.textureCleaner(map.getMapBackground());
     }
     private:
     //Entity Manager
-    EntityManager EM{};
+    EntityManager EM;
     //Systems
-    CollisionSystem coll_sys{};
-    PhysicSystem phy_sys{};
-    RenderSystem rend_sys{};
-    InputSystem inp_sys{};
+    CollisionSystem coll_sys;
+    PhysicSystem phy_sys;
+    RenderSystem rend_sys;
+    InputSystem inp_sys;
+    //Mapa
+    Map map;
     //Enemy time to spawn
-    int spawnRatio=50;
-    int spawn = spawnRatio;
-    bool running = true;
-    float score = 0.0f;
+    int spawnRatio;
+    int spawn;
+    bool running;
+    float score;
 
     void createPlayer(){
         auto& player = EM.createEntity();
@@ -78,23 +83,15 @@ struct Game{
         enemy.rend.value().box = {0,0, (float)enemy.rend.value().sprite.width, (float)enemy.rend.value().sprite.height};
         
     } 
-    void drawAndMoveMap(Texture2D& tex, float& map_x, float& map_y, float& speed){
-        map_x -= speed;
-        if (map_x <= -tex.width) map_x = 0;
-        DrawTextureEx(tex, Vector2{map_x,map_y}, 0.0f, 1.0f, WHITE);
-        DrawTextureEx(tex, Vector2{map_x + tex.width, map_y}, 0.0f, 1.0f, WHITE);
-    }
-    void textureCleaner(Texture2D& tex){
-        UnloadTexture(tex);
-    }
-    void replay(Texture2D& background, float& speed){
+
+    void replay(Map& map){
         if (IsKeyDown(KEY_SPACE)){
             score = 0.0f;
             running = true;
             createPlayer();
 
-            speed = 4.0f;
-            background = LoadTexture("img/background.png");
+            map.setMapSpeed(4.0f);
+            map.setMapBackground("img/background.png");
         }
     }
 };

@@ -10,6 +10,7 @@ struct EntityManager{
     }
     ~EntityManager(){
         for(std::size_t i =0;i < entities.size();i++){
+            UnloadTexture(entities[i].rend.value().sprite);
             removeEntity(entities[i].id);
         }
         entities.clear();

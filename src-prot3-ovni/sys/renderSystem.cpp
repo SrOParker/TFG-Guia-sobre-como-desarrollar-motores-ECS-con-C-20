@@ -8,8 +8,7 @@ RenderSystem::RenderSystem(){
 }
 
 void RenderSystem::update(EntityManager& EM, float score){
-    //draw text
-    printText(score);
+
     //draw entities
     EM.forall([&](Entity&e){
         if(e.rend.has_value()){
@@ -18,6 +17,9 @@ void RenderSystem::update(EntityManager& EM, float score){
             DrawTextureRec(e.rend.value().sprite, e.rend.value().box, (Vector2){posx,posy},WHITE);
         }
     });
+
+    //draw text
+    printText(score);
 }
 
 void RenderSystem::printText(float score){

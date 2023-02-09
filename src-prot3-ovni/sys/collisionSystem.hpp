@@ -1,7 +1,8 @@
 #include "../man/manentity.hpp"
+#include "../map.hpp"
 struct CollisionSystem{
-    void update(EntityManager& EM, Texture2D& tex, float& speed, bool& running);
+    void update(EntityManager& EM,Map& map, bool& running);
 
     private:
-    void collisionWithEnemy(EntityManager& EM, Texture2D& tex, float& speed, bool& running);
+    void collisionWithEnemy(EntityManager& EM, Map& map, bool& running);
 };
