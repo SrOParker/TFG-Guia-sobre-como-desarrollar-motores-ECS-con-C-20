@@ -1,6 +1,16 @@
 #include "renderSystem.hpp"
 #include <raylib.h>
-void RenderSystem::update(EntityManager& EM){
+#include <iomanip>
+#include <sstream>
+#include <iostream>
+RenderSystem::RenderSystem(){
+    fontSize = 20;
+}
+
+void RenderSystem::update(EntityManager& EM, float score){
+    //draw text
+    printText(score);
+    //draw entities
     EM.forall([&](Entity&e){
         if(e.rend.has_value()){
             float posx = e.phy.value().position.first;
@@ -8,4 +18,13 @@ void RenderSystem::update(EntityManager& EM){
             DrawTextureRec(e.rend.value().sprite, e.rend.value().box, (Vector2){posx,posy},WHITE);
         }
     });
+}
+
+void RenderSystem::printText(float score){
+    //draw text
+    std::ostringstream stream;
+    stream << std::fixed << std::setprecision(3) << "Puntuación: "<< score << " km";
+    std::string str = stream.str();
+    const char* pointsString = str.c_str();
+    DrawText(pointsString, 250,15,fontSize, BLUE);
 }

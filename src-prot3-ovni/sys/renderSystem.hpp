@@ -1,4 +1,8 @@
 #include "../man/manentity.hpp"
 struct RenderSystem{
-    void update(EntityManager& EM);
+    RenderSystem();
+    void update(EntityManager& EM, float score);
+    void printText(float score);
+    private:
+    int fontSize;
 };

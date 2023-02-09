@@ -4,4 +4,5 @@
 struct InputSystem{
 
     void update(EntityManager& EM);
+
 };

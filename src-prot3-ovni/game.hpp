@@ -17,15 +17,23 @@ struct Game{
         SetTargetFPS(60);
         while (!WindowShouldClose()){
             BeginDrawing();
-                ClearBackground(RAYWHITE);
-                
+            ClearBackground(RAYWHITE);
+            if(running){
                 drawAndMoveMap(background, map_x, map_y, speed);
-                rend_sys.update(EM);
+                
+                rend_sys.update(EM, score);
                 phy_sys.update(EM);
                 inp_sys.update(EM);
-                coll_sys.update(EM, background, speed);
+                coll_sys.update(EM, background, speed, running);
                 enemySpawn();
-                
+                score+= 0.1f;
+            }else{
+                map_x=map_y=0;       
+                drawAndMoveMap(background, map_x, map_y, speed); 
+                rend_sys.printText(score);
+                //REPLAY GAME
+                replay(background, speed);
+            }
             EndDrawing();
         }
         textureCleaner(background);
@@ -41,6 +49,8 @@ struct Game{
     //Enemy time to spawn
     int spawnRatio=50;
     int spawn = spawnRatio;
+    bool running = true;
+    float score = 0.0f;
 
     void createPlayer(){
         auto& player = EM.createEntity();
@@ -77,5 +87,14 @@ struct Game{
     void textureCleaner(Texture2D& tex){
         UnloadTexture(tex);
     }
+    void replay(Texture2D& background, float& speed){
+        if (IsKeyDown(KEY_SPACE)){
+            score = 0.0f;
+            running = true;
+            createPlayer();
 
+            speed = 4.0f;
+            background = LoadTexture("img/background.png");
+        }
+    }
 };

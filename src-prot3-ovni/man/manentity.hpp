@@ -12,6 +12,7 @@ struct EntityManager{
         for(std::size_t i =0;i < entities.size();i++){
             removeEntity(entities[i].id);
         }
+        entities.clear();
     }
     auto& createEntity(){ return entities.emplace_back();}
     void forall(auto&& function){
