@@ -8,13 +8,7 @@ struct EntityManager{
     EntityManager(std::size_t size_for_entities = 10){
         entities.reserve(size_for_entities);
     }
-    ~EntityManager(){
-        for(std::size_t i =0;i < entities.size();i++){
-            UnloadTexture(entities[i].rend.value().sprite);
-            removeEntity(entities[i].id);
-        }
-        entities.clear();
-    }
+
     auto& createEntity(){ return entities.emplace_back();}
     void forall(auto&& function){
         for(auto&e:entities){

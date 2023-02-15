@@ -9,7 +9,6 @@
 struct Entity{
     
     Entity();
-
     int id;
     std::optional<CollisionCMP> coll;
     std::optional<InputCMP> inp;

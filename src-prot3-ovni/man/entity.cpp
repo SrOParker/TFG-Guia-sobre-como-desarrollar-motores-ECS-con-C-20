@@ -2,6 +2,4 @@
 
 Entity::Entity(){
     id = nextID++;
-    
-
 }

@@ -16,15 +16,12 @@ struct Game{
         phy_sys = PhysicSystem();
         rend_sys = RenderSystem();
         inp_sys = InputSystem();
-        running = true;
         score = 0.0f;
         record=0.0f;
-        
         difficulty = 1;
         spawnRatio=SPAWN_NUMBER - DIFFICULTY_INCREMENT * difficulty;
         spawn = spawnRatio;
     }
-
     void run(){
         map.setMapBackground("img/menu.png");
         SetTargetFPS(60);
@@ -56,25 +53,6 @@ struct Game{
         }map.textureCleaner(map.getMapBackground());
     }
     private:
-    //Entity Manager
-    EntityManager EM;
-    //Systems
-    CollisionSystem coll_sys;
-    PhysicSystem phy_sys;
-    RenderSystem rend_sys;
-    InputSystem inp_sys;
-    //Mapa
-    Map map;
-    //Enemy time to spawn
-    int spawnRatio;
-    int spawn;
-    bool running;
-    float score;
-    float record;
-    int difficulty;
-    //State of the game
-    States state;
-
     void createPlayer(){
         auto& player = EM.createEntity();
         player.phy = PhysicCMP();
@@ -119,7 +97,7 @@ struct Game{
             score = 0.0f;
             createPlayer();
             map.setMapSpeed(4.0f);
-            map.setMapBackground("img/background.png");
+            map.setMapBackground("img/background1.png");
             state = States::play;
         }
     }
@@ -138,4 +116,22 @@ struct Game{
         }
         
     }
+    //Entity Manager
+    EntityManager EM;
+    //Systems
+    CollisionSystem coll_sys;
+    PhysicSystem phy_sys;
+    RenderSystem rend_sys;
+    InputSystem inp_sys;
+    //Mapa
+    Map map;
+    //Enemy time to spawn
+    int spawnRatio;
+    int spawn;
+    float score;
+    float record;
+    int difficulty;
+    //State of the game
+    States state;
+
 };
