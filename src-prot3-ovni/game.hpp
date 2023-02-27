@@ -37,10 +37,12 @@ struct Game{
                 goToPlay();
                 break;
             case States::play:
-                rend_sys.update(EM, score);
+                
                 phy_sys.update(EM);
                 inp_sys.update(EM);
+                rend_sys.update(EM, score);
                 coll_sys.update(EM, map, state);
+                
                 enemySpawn();
                 score+= 0.1f;
                 break;

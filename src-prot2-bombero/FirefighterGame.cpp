@@ -5,22 +5,25 @@
 #include "../libs/bltl/src/terminalhelper.hpp"
 
 struct RenderComponent{
-    const char* sprite;
+    const char* sprite{};
 };
 struct RoomComponent{
-
-    int position;
-    int fire;
+    int position{};
+    int fire{};
 };
 struct MovementComponent{
-    int yPos;
+    int yPos{};
 };
 
 struct Entity{
-    RenderComponent render;
-    RoomComponent room;
-    MovementComponent movement;
-    bool rendCMP, roomCMP, movementCMP = false;
+    bool has_render{};
+    RenderComponent render{};
+    
+    bool has_room{};
+    RoomComponent room{};
+    
+    bool has_movement{};
+    MovementComponent movement{};
 };
 
 
@@ -47,7 +50,7 @@ struct EntityManager{
 struct MovementSystem{
     void update(EntityManager& EM, bool& running, TERM::Terminal_t& drawer, int& score){
         EM.forall([&](Entity&e){
-            if(e.movementCMP == true){
+            if(e.has_movement == true){
                 PressKey(EM, running, drawer, score);
             }
         });
@@ -156,16 +159,16 @@ struct Game{
     void createEntitiesForFirefighterGame(){
         auto& player = manager.createEntity();
         player.render.sprite="B";
-        player.rendCMP = true;
-        player.movementCMP = true;
+        player.has_render = true;
+        player.has_movement = true;
 
         for(int i=0; i < 6; i++){
             auto& room_ENTITY = manager.createEntity();
             room_ENTITY.room.fire= rand()%3;
             room_ENTITY.room.position = i;
             room_ENTITY.render.sprite= "~";
-            room_ENTITY.roomCMP = true;
-            room_ENTITY.rendCMP = true;
+            room_ENTITY.has_room = true;
+            room_ENTITY.has_render = true;
         }
 
     }
