@@ -37,17 +37,19 @@ struct Game{
                 goToPlay();
                 break;
             case States::play:
-                
-                phy_sys.update(EM);
                 inp_sys.update(EM);
-                rend_sys.update(EM, score);
                 coll_sys.update(EM, map, state);
+                phy_sys.update(EM);
+                rend_sys.update(EM, score);
+                
                 
                 enemySpawn();
                 score+= 0.1f;
                 break;
             case States::end:
                 rend_sys.printScore(score);
+                rend_sys.update(EM,score);
+                rend_sys.printExit();
                 goToMenu();
                 break;
             }
@@ -90,6 +92,8 @@ struct Game{
             score = 0.0f;
             state = States::menu;
             map.setMapBackground("img/menu.png");
+            map.setMapPositions((Vector2){0,0});
+            EM.removeAllEntities(); 
             spawnRatio = SPAWN_NUMBER;
         }
 

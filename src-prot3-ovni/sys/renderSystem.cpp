@@ -41,6 +41,15 @@ void RenderSystem::printRecord(float record){
     DrawText(pointsString, 350,92,fontSize, WHITE);
 }
 
+void RenderSystem::printExit(){
+    //draw text
+    std::ostringstream stream;
+    stream << std::fixed << std::setprecision(2) << "YOU LOSE - PRESS SPACE TO RETURN TO MENU" ;
+    std::string str = stream.str();
+    const char* pointsString = str.c_str();
+    DrawText(pointsString, 85,200,fontSize, WHITE);
+}
+
 void RenderSystem::printDifficultySelected(int dif){
     std::ostringstream stream;
     stream << dif;

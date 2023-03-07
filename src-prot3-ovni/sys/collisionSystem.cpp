@@ -22,14 +22,10 @@ void CollisionSystem::update(EntityManager& EM, Map& map, States& state){
 
 
 void CollisionSystem::collisionWithEnemy(EntityManager& EM, Map& map, States& state){
-    
-    EM.removeAllEntities();
     state = States::end;
     map.setMapSpeed( 0.0f );
-    map.setMapBackground( "img/end.png" );
-    map.setMapPositions((Vector2){0,0});  
-        
-    
 
-
+    for(int i=0; i<(int)EM.getEntityVector().size();i++){
+        EM.getEntityVector()[i].phy.value().velocity.first = 0;
+    }
 }
