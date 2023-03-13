@@ -1,4 +1,6 @@
 #include "game.hpp"
+
+
 void Game::createEntitiesForFirefighterGameRL(){
     auto& player = EM.createEntity();
     //player.render.sprite= LoadTexture("img/bombero.png");
@@ -17,7 +19,7 @@ void Game::createEntitiesForFirefighterGameRL(){
 }
 
 bool Game::checkRooms(bool& ending){
-    for(int i =0 ; i<EM.getEntityVector().size()-1;i++){
+    for(int i =0 ; i<(int)EM.getEntityVector().size()-1;i++){
         if(EM.getEntityVector()[i+1].room.fire > 9){
             ending = true;   
             return true; 
@@ -28,6 +30,7 @@ bool Game::checkRooms(bool& ending){
 
 void Game::run(){
     //map.setMapBackground("img/menu.png");
+    map = new Map();
     SetTargetFPS(60);
     createEntitiesForFirefighterGameRL();
     bool running = true;
@@ -43,12 +46,13 @@ void Game::run(){
         if(!end){
             mov_sys.update(EM, running, score);
         }
-        rend_sys.update(EM, score);
+        rend_sys.update(EM, map, score);
         if(end){
             rend_sys.printLose();
         }
     
         EndDrawing();         
     }
+    delete map;
 }
 

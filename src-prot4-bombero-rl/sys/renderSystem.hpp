@@ -1,5 +1,6 @@
 #pragma once
 #include "../man/manentity.hpp"
+#include "../map.hpp"
 //#include <iomanip>
 #include <sstream>
 #include <iostream>
@@ -10,10 +11,11 @@
 
 struct RenderSystem{
     RenderSystem();
-    void update(EntityManager& EM, int score);
+    void update(EntityManager& EM, Map* map, int score);
     void printLose();
     
     private:
     void printText(int& score);
+   
     float row_size{}, col_size{};
 };

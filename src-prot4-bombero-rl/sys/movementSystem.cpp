@@ -9,7 +9,7 @@ void MovementSystem::update(EntityManager& EM, bool& running, int& score){
 }
 void MovementSystem::PressKey(EntityManager& EM, Entity& e, bool& running, int& score){
     if(e.has_movement){
-        if (IsKeyDown(KEY_W)){
+        if (IsKeyDown(KEY_W) && !w_pressed){
             if(e.movement.yPos != 0){
                 e.movement.yPos -=1;
                 for(int i =0 ;i < 2; i++){
@@ -18,7 +18,7 @@ void MovementSystem::PressKey(EntityManager& EM, Entity& e, bool& running, int& 
                 }
             }
         }
-        if (IsKeyDown(KEY_S)){
+        if (IsKeyDown(KEY_S)&& !s_pressed){
             if(e.movement.yPos != 5){
                 e.movement.yPos +=1;
                 for(int i =0 ;i < 2; i++){
@@ -36,4 +36,10 @@ void MovementSystem::PressKey(EntityManager& EM, Entity& e, bool& running, int& 
             running = false;
         }
     }
+    ControlKeys();
+}
+
+void MovementSystem::ControlKeys(){
+    w_pressed = IsKeyDown(KEY_W);
+    s_pressed = IsKeyDown(KEY_S);
 }
