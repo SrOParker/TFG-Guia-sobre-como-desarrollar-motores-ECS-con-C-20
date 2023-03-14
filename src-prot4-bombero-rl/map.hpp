@@ -1,6 +1,7 @@
 #pragma once
 #include <raylib.h>
 
+
 struct Background{
     Texture2D sprite = LoadTexture("img/background.png");
     Rectangle box    = {0,0, (float)sprite.width, (float)sprite.height};

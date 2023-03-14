@@ -4,7 +4,7 @@
 #include "game.hpp"
 
 int main(){
-    Game game;
+    Game game{};
     
     // Inicializar la ventana
     InitWindow(700, 400, "FIREFIGHTER GAME");
@@ -14,7 +14,12 @@ int main(){
     
     
     // Cerrar la ventana y liberar los recursos
-    CloseWindow();
-   
+    if(IsWindowReady()){
+        CloseWindow();
+    }
+
+    //elimina segmentation
+    game = Game();
+
     return 0;
 }

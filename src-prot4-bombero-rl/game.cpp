@@ -30,7 +30,7 @@ bool Game::checkRooms(bool& ending){
 
 void Game::run(){
     //map.setMapBackground("img/menu.png");
-    map = new Map();
+    Map map{};
     SetTargetFPS(60);
     createEntitiesForFirefighterGameRL();
     bool running = true;
@@ -46,13 +46,12 @@ void Game::run(){
         if(!end){
             mov_sys.update(EM, running, score);
         }
-        rend_sys.update(EM, map, score);
+        rend_sys.update(EM,map, score);
         if(end){
             rend_sys.printLose();
         }
     
         EndDrawing();         
     }
-    delete map;
 }
 

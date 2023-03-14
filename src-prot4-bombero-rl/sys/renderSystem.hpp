@@ -11,7 +11,7 @@
 
 struct RenderSystem{
     RenderSystem();
-    void update(EntityManager& EM, Map* map, int score);
+    void update(EntityManager& EM, Map& map, int score);
     void printLose();
     
     private:
@@ -19,3 +19,4 @@ struct RenderSystem{
    
     float row_size{}, col_size{};
 };
+

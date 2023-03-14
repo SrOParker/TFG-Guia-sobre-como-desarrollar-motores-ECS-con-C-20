@@ -7,8 +7,7 @@ struct Game{
     private:
         void createEntitiesForFirefighterGameRL();
         bool checkRooms(bool& ending);
-        EntityManager EM{};
-        Map* map;
         MovementSystem mov_sys{};
         RenderSystem rend_sys{}; 
+        EntityManager EM{};
 };
