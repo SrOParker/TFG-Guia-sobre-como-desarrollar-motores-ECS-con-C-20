@@ -2,7 +2,8 @@
 
 #include "man/manentity.hpp"
 #include "sys/renderSys.hpp"
-
+#include "sys/inputSys.hpp"
+#include "gameManager.hpp"
 struct Game{
     
     void run();
@@ -13,4 +14,6 @@ struct Game{
 
     EntityManager EM{};
     RenderSystem rendSys{};
+    InputSystem inpSys{};
+    GameManager GM{};
 };

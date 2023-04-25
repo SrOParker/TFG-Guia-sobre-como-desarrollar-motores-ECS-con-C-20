@@ -115,4 +115,41 @@ struct ComponentStorage{
     }
     Slotmap<StatsCMP> statsStorage{};
 
+    // INPUT STORAGE
+    void addInputCMP(InputCMP& cmp, Entity& e){
+        addInputCMP(InputCMP{ cmp }, e);
+    }
+    void addInputCMP(InputCMP&& cmp, Entity& e){
+        //Comprobamos que esa entidad no tenga ese componente ya
+        if(!e.hasComponent(InputCMP::mask)){
+            //Añadimos el componente al slotmap y guardamos la llave en la entidad
+            e.inputKey = inputStorage.push_back(cmp);
+            //actualizamos la máscara de la entidad
+            e.cmpMask = e.cmpMask | cmp.mask;
+        }else{
+            //Si tiene ese componente lo modificamos y se lo actualizamos
+            auto& cmpposition = inputStorage[e.inputKey];
+            cmpposition = cmp;
+        }
+    }
+    InputCMP& getInputCMP(Entity& e){
+        if(!e.hasComponent(InputCMP::mask)) throw std::runtime_error(" InputCMP no existe ");
+        return inputStorage[e.inputKey];  
+    }
+    bool removeInputCMP(Entity& e){
+        if(e.hasComponent(InputCMP::mask)){
+            //Eliminamos el componente de posicion
+            inputStorage.erase(e.inputKey);
+            //Actualizamos la mascara de la entidad
+            e.cmpMask = e.cmpMask xor InputCMP::mask;
+            //ELiminamos la key de la entidad
+            e.inputKey.id = 0;
+            e.inputKey.gen= 0;
+            return true;
+        }
+        return false;
+    }
+    Slotmap<InputCMP> inputStorage{};
+
+
 };

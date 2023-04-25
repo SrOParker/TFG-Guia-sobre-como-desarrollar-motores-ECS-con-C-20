@@ -1,20 +1,23 @@
 #pragma once
 #include <raylib.h>
+struct Component{
 
-struct RenderCMP{
+};
+
+struct RenderCMP {
     const char* route {};
     Texture2D sprite { LoadTexture(route) };
     Rectangle  frame = {0,0,(float)sprite.width, (float)sprite.height};
     static int const mask{0b1};
 };
 
-struct PositionCMP{
+struct PositionCMP {
     int posX{};
     int posY{};
     static int const mask{0b10};
 };
 
-struct StatsCMP{
+struct StatsCMP {
     int health{};
     int damage{};
     int step{};
@@ -24,7 +27,7 @@ struct StatsCMP{
     static int const mask{0b100};
 };
 
-struct InputCMP{
+struct InputCMP {
     int KeyW = KEY_W;
     int KeyA = KEY_A;
     int KeyD = KEY_D;

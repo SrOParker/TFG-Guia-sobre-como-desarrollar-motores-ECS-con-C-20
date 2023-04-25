@@ -1,8 +1,9 @@
 #pragma once
 #include <iostream>
+#include "manentity.hpp"
 #include "utils/slotmap.hpp"
 #include "../cmp/components.hpp"
-#include "manentity.hpp"
+
 
 struct Entity{
     int cmpMask{0b0};
@@ -10,7 +11,8 @@ struct Entity{
     Slotmap<RenderCMP>::key_type renderKey;
     Slotmap<PositionCMP>::key_type positionKey;
     Slotmap<StatsCMP>::key_type statsKey;
-
+    Slotmap<InputCMP>::key_type inputKey;
+    
     bool hasComponent(int m){
         if((cmpMask & m) == m){
             return true;
@@ -22,5 +24,9 @@ struct Entity{
             return true;
         }
         return false;
+    }
+
+    void addTag(int tag){
+        tagMask = tagMask | tag;
     }
 };
