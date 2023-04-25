@@ -7,7 +7,7 @@ int main(){
     Game game{};
     
     // Inicializar la ventana
-    InitWindow(700, 400, "FIREFIGHTER GAME");
+    InitWindow(800, 608, "FINAL ROOM");
 
     // Bucle del juego
     game.run();
@@ -17,7 +17,6 @@ int main(){
     if(IsWindowReady()){
         CloseWindow();
     }
-
 
     return 0;
 }

@@ -1,8 +1,8 @@
 CC = g++
-CFLAGS = -std=c++20 -Wall -Wextra #-fsanitize=address
-LDFLAGS = -lraylib #-fsanitize=address
+CFLAGS = -std=c++20 -Wall -Wextra -fsanitize=address
+LDFLAGS = -lraylib -fsanitize=address
 
-SOURCES = main.cpp
+SOURCES = main.cpp game.cpp sys/renderSys.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 OBJECTS := $(patsubst %, obj/%, $(OBJECTS))
 EXECUTABLE = game
@@ -15,6 +15,9 @@ $(EXECUTABLE): $(OBJECTS)
 obj/%.o: %.cpp
 	@mkdir -p $(@D)
 	$(CC) $(CFLAGS) -c $< -o $@
+
+run: $(EXECUTABLE)
+	valgrind --leak-check=full ./$(EXECUTABLE)
 
 clean:
 	rm -rf obj

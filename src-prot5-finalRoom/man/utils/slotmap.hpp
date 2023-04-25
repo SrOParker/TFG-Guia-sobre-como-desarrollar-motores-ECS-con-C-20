@@ -60,7 +60,7 @@
 
 
 
-template <typename DataType, std::size_t Capacity = 10>
+template <typename DataType, std::size_t Capacity = 300>
 struct Slotmap {
 public:
     using value_type = DataType;

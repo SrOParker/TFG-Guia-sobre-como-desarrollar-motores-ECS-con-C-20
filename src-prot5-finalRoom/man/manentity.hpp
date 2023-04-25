@@ -12,6 +12,7 @@ struct EntityManager{
     }
 
     auto& createEntity(){ return entities.emplace_back();}
+    
     void forall(auto&& function){
         for(auto&e:entities){
             function(e);

@@ -8,7 +8,8 @@ struct Entity{
     int cmpMask{0b0};
     int tagMask{0b0};
     Slotmap<RenderCMP>::key_type renderKey;
-
+    Slotmap<PositionCMP>::key_type positionKey;
+    Slotmap<StatsCMP>::key_type statsKey;
 
     bool hasComponent(int m){
         if((cmpMask & m) == m){
