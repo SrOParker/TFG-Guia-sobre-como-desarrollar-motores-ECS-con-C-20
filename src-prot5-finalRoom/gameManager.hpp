@@ -35,12 +35,12 @@ struct GameManager{
             for(int j = 0; j < 15; j++){
                 if (matrix_lvl[i][j] == 2){
                     auto& rock_wall = EM.createEntity();
-                    rock_wall.addTag(Tags::wall);
+                    rock_wall.addTag(Tags::wall | Tags::collisionable);
                     EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_2.png"}, rock_wall);
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
                 }else if(matrix_lvl[i][j] == 1){
                     auto& rock_wall = EM.createEntity();
-                    rock_wall.addTag(Tags::wall);
+                    rock_wall.addTag(Tags::wall | Tags::collisionable);
                     EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_1.png"}, rock_wall);
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
                 }else if(!player_alive && matrix_lvl[i][j] == 0){
@@ -86,7 +86,7 @@ struct GameManager{
     
     void createPlayer(EntityManager& EM, int x, int y){
         auto& player = EM.createEntity();
-        player.addTag(Tags::player | Tags::movement);
+        player.addTag(Tags::player | Tags::movement | Tags::collider);
         EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/player.png"}, player);
         EM.getCMPStorage().addPositionCMP(PositionCMP{x,y}, player);
         EM.getCMPStorage().addInputCMP(InputCMP{}, player);

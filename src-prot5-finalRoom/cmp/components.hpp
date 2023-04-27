@@ -38,8 +38,10 @@ struct InputCMP {
 };
 
 struct Tags{
-    static int const player     {0b00000001};
-    static int const enemy      {0b00000010};
-    static int const wall       {0b00000100};
-    static int const movement   {0b00001000};
+    static int const player         {0b00000001};
+    static int const enemy          {0b00000010};
+    static int const wall           {0b00000100};
+    static int const movement       {0b00001000};
+    static int const collider       {0b00010000};
+    static int const collisionable  {0b00100000};
 };

@@ -8,6 +8,7 @@ void Game::run(){
         BeginDrawing();
         ClearBackground(RAYWHITE);
         inpSys.update(EM);
+        collSys.update(EM);
         posSys.update(EM);
         rendSys.update(EM, map);
         EndDrawing();

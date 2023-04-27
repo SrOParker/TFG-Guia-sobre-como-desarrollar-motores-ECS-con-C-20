@@ -5,6 +5,7 @@
 #include "sys/renderSys.hpp"
 #include "sys/inputSys.hpp"
 #include "sys/positionSys.hpp"
+#include "sys/collisionSys.hpp"
 struct Game{
     
     void run();
@@ -19,4 +20,5 @@ struct Game{
     RenderSystem rendSys{};
     InputSystem inpSys{};
     PositionSystem posSys{};
+    CollisionSystem collSys{};
 };
