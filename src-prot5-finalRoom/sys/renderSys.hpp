@@ -15,5 +15,6 @@ struct RenderSystem{
     void update(EntityManager& EM, Map& map);
     private:
     void renderMap(Map& map);
-    int maskToCheck = RenderCMP::mask | PositionCMP::mask; // | StatsCMP::mask; (we can add more with OR operation)
+    int cmpMaskToCheck = RenderCMP::mask | PositionCMP::mask; // | StatsCMP::mask; (we can add more with OR operation)
+    int tagMaskToCheck = 0;
 };

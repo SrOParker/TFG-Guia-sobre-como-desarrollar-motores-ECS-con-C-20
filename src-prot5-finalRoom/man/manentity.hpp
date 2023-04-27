@@ -19,9 +19,10 @@ struct EntityManager{
         }
     }
 
-    void forallMatching(auto&& function, int systemCMPmask){
+    void forallMatching(auto&& function, int systemCMPmask, int systemTAGmask){
         for(auto&e:entities){
-            if((e.cmpMask & systemCMPmask) == systemCMPmask){
+            if(((e.cmpMask & systemCMPmask) == systemCMPmask) && 
+               ((e.tagMask & systemTAGmask) == systemTAGmask)){
                 function(e);
             }
         }

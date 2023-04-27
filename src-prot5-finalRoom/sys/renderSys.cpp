@@ -7,7 +7,7 @@ void RenderSystem::update(EntityManager& EM, Map& map){
         float pos_X = HORIZONTAL_BORDER + pos.posX * SPRITE_DIMENSIONS;
         float pos_Y = VERTICAL_BORDER + pos.posY * SPRITE_DIMENSIONS;
         DrawTextureRec(render.sprite, render.frame, (Vector2){pos_X, pos_Y},WHITE);
-    }, maskToCheck);
+    }, cmpMaskToCheck, tagMaskToCheck);
 }
 
 void RenderSystem::renderMap(Map& map){

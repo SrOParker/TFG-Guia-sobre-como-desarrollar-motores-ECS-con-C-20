@@ -34,13 +34,15 @@ struct GameManager{
         for (int i = 0; i < 15;i++){
             for(int j = 0; j < 15; j++){
                 if (matrix_lvl[i][j] == 2){
-                    auto& pedrolo = EM.createEntity();
-                    EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_2.png"}, pedrolo);
-                    EM.getCMPStorage().addPositionCMP(PositionCMP{j,i}, pedrolo);
+                    auto& rock_wall = EM.createEntity();
+                    rock_wall.addTag(Tags::wall);
+                    EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_2.png"}, rock_wall);
+                    EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
                 }else if(matrix_lvl[i][j] == 1){
-                    auto& pedrolo = EM.createEntity();
-                    EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_1.png"}, pedrolo);
-                    EM.getCMPStorage().addPositionCMP(PositionCMP{j,i}, pedrolo);
+                    auto& rock_wall = EM.createEntity();
+                    rock_wall.addTag(Tags::wall);
+                    EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_1.png"}, rock_wall);
+                    EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
                 }else if(!player_alive && matrix_lvl[i][j] == 0){
                     createPlayer(EM,j,i);
                 }
@@ -65,26 +67,26 @@ struct GameManager{
     
     //NIVELES
     const int map_lvl1[SIZELVL][SIZELVL]{{0,0,0,0,0,0,0,0,0,1,1,2,2,0,0},
-                     {1,1,1,2,0,0,0,0,0,0,0,0,0,0,1},
-                     {0,0,1,2,0,0,0,0,0,0,0,0,0,0,1},
-                     {0,0,1,2,0,0,0,0,0,0,0,0,0,0,2},
-                     {0,0,0,0,0,0,1,1,0,0,0,0,0,0,1},
-                     {0,0,0,0,0,1,1,1,1,0,0,0,0,0,0},
-                     {0,0,0,2,2,2,2,2,2,2,2,2,0,0,0},
-                     {0,1,0,2,1,2,0,0,0,0,1,0,0,0,1},
-                     {0,1,0,2,1,1,0,0,0,0,1,0,0,0,0},
-                     {0,1,0,2,0,2,0,0,0,0,2,0,0,0,1},
-                     {0,1,0,1,0,1,0,0,0,0,2,0,0,0,0},
-                     {0,1,0,1,0,2,0,0,0,0,1,0,0,0,0},
-                     {0,0,0,0,0,0,0,0,0,0,1,0,2,2,2},
-                     {0,0,1,1,1,1,0,0,0,0,0,0,2,0,1},
-                     {0,0,0,0,0,0,0,0,0,0,0,0,2,1,0}
-                    };
+                                         {1,1,1,2,0,0,0,0,0,0,0,0,0,0,1},
+                                         {0,0,1,2,0,0,0,0,0,0,0,0,0,0,1},
+                                         {0,0,1,2,0,0,0,0,0,0,0,0,0,0,2},
+                                         {0,0,0,0,0,0,1,1,0,0,0,0,0,0,1},
+                                         {0,0,0,0,0,1,1,1,1,0,0,0,0,0,0},
+                                         {0,0,0,2,2,2,2,2,2,2,2,2,0,0,0},
+                                         {0,1,0,2,1,2,0,0,0,0,1,0,0,0,1},
+                                         {0,1,0,2,1,1,0,0,0,0,1,0,0,0,0},
+                                         {0,1,0,2,0,2,0,0,0,0,2,0,0,0,1},
+                                         {0,1,0,1,0,1,0,0,0,0,2,0,0,0,0},
+                                         {0,1,0,1,0,2,0,0,0,0,1,0,0,0,0},
+                                         {0,0,0,0,0,0,0,0,0,0,1,0,2,2,2},
+                                         {0,0,1,1,1,1,0,0,0,0,0,0,2,0,1},
+                                         {0,0,0,0,0,0,0,0,0,0,0,0,2,1,0}
+                                        };
     int random_lvl[SIZELVL][SIZELVL]{};
     
     void createPlayer(EntityManager& EM, int x, int y){
         auto& player = EM.createEntity();
-        player.addTag(Tags::player);
+        player.addTag(Tags::player | Tags::movement);
         EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/player.png"}, player);
         EM.getCMPStorage().addPositionCMP(PositionCMP{x,y}, player);
         EM.getCMPStorage().addInputCMP(InputCMP{}, player);

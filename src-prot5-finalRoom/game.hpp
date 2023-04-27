@@ -1,9 +1,10 @@
 #pragma once
 
 #include "man/manentity.hpp"
+#include "gameManager.hpp"
 #include "sys/renderSys.hpp"
 #include "sys/inputSys.hpp"
-#include "gameManager.hpp"
+#include "sys/positionSys.hpp"
 struct Game{
     
     void run();
@@ -13,7 +14,9 @@ struct Game{
     void createEntities();
 
     EntityManager EM{};
+    GameManager GM{};
+    
     RenderSystem rendSys{};
     InputSystem inpSys{};
-    GameManager GM{};
+    PositionSystem posSys{};
 };

@@ -14,6 +14,8 @@ struct RenderCMP {
 struct PositionCMP {
     int posX{};
     int posY{};
+    int velX{};
+    int velY{};
     static int const mask{0b10};
 };
 
@@ -36,7 +38,8 @@ struct InputCMP {
 };
 
 struct Tags{
-    static int const player {0b00000001};
-    static int const enemy  {0b00000010};
-    static int const wall   {0b00000100};
+    static int const player     {0b00000001};
+    static int const enemy      {0b00000010};
+    static int const wall       {0b00000100};
+    static int const movement   {0b00001000};
 };
