@@ -38,11 +38,13 @@ struct GameManager{
                     rock_wall.addTag(Tags::wall | Tags::collisionable);
                     EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_2.png"}, rock_wall);
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
+                    EM.getCMPStorage().addStatsCMP(StatsCMP{6,0,0,0,0}, rock_wall);
                 }else if(matrix_lvl[i][j] == 1){
                     auto& rock_wall = EM.createEntity();
                     rock_wall.addTag(Tags::wall | Tags::collisionable);
                     EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_1.png"}, rock_wall);
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
+                    EM.getCMPStorage().addStatsCMP(StatsCMP{3,0,0,0,0}, rock_wall);
                 }else if(!player_alive && matrix_lvl[i][j] == 0){
                     createPlayer(EM,j,i);
                 }
@@ -90,6 +92,7 @@ struct GameManager{
         EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/player.png"}, player);
         EM.getCMPStorage().addPositionCMP(PositionCMP{x,y}, player);
         EM.getCMPStorage().addInputCMP(InputCMP{}, player);
+        EM.getCMPStorage().addStatsCMP(StatsCMP{3,1,1,5,1}, player);
 
         player_alive=true;
     }

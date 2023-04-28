@@ -1,8 +1,5 @@
 #pragma once
 #include <raylib.h>
-struct Component{
-
-};
 
 struct RenderCMP {
     const char* route {};

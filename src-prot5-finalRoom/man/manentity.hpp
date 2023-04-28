@@ -27,6 +27,23 @@ struct EntityManager{
             }
         }
     }
+
+    void removeEntity(Entity& e) {
+        //Elimina todos los componentes de una entidad
+        removeAllComponents(e);
+        //Eliminar entidad
+        auto it = std::remove_if(entities.begin(), entities.end(), [e](Entity &ent) {
+            return e == ent;
+        });
+        entities.erase(it, entities.end());
+    }
+    void removeAllComponents(Entity& e){
+        CS.removeInputCMP(e);
+        CS.removePositionCMP(e);
+        CS.removeRenderCMP(e);
+        CS.removeStatsCMP(e);
+    }
+
     std::vector<Entity>& getEntityVector(){
         return entities;
     }
