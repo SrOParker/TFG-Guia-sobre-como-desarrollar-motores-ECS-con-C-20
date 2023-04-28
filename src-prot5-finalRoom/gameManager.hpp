@@ -47,6 +47,15 @@ struct GameManager{
                     EM.getCMPStorage().addStatsCMP(StatsCMP{3,0,0,0,0}, rock_wall);
                 }else if(!player_alive && matrix_lvl[i][j] == 0){
                     createPlayer(EM,j,i);
+                }else if(matrix_lvl[i][j] == 3){
+                    Entity& enemy = createEnemy(EM,3);
+                    auto& pos = EM.getCMPStorage().getPositionCMP(enemy);
+                    pos.posX = j; pos.posY = i;
+
+                }else if(matrix_lvl[i][j] == 4){
+                    Entity& enemy = createEnemy(EM,4);
+                    auto& pos = EM.getCMPStorage().getPositionCMP(enemy);
+                    pos.posX = j; pos.posY = i;
                 }
             }
         }
@@ -72,17 +81,17 @@ struct GameManager{
                                          {1,1,1,2,0,0,0,0,0,0,0,0,0,0,1},
                                          {0,0,1,2,0,0,0,0,0,0,0,0,0,0,1},
                                          {0,0,1,2,0,0,0,0,0,0,0,0,0,0,2},
-                                         {0,0,0,0,0,0,1,1,0,0,0,0,0,0,1},
+                                         {4,0,0,0,0,0,1,1,0,0,3,0,0,0,1},
                                          {0,0,0,0,0,1,1,1,1,0,0,0,0,0,0},
                                          {0,0,0,2,2,2,2,2,2,2,2,2,0,0,0},
                                          {0,1,0,2,1,2,0,0,0,0,1,0,0,0,1},
                                          {0,1,0,2,1,1,0,0,0,0,1,0,0,0,0},
-                                         {0,1,0,2,0,2,0,0,0,0,2,0,0,0,1},
+                                         {0,1,0,2,0,2,3,0,0,0,2,0,0,0,1},
                                          {0,1,0,1,0,1,0,0,0,0,2,0,0,0,0},
                                          {0,1,0,1,0,2,0,0,0,0,1,0,0,0,0},
                                          {0,0,0,0,0,0,0,0,0,0,1,0,2,2,2},
                                          {0,0,1,1,1,1,0,0,0,0,0,0,2,0,1},
-                                         {0,0,0,0,0,0,0,0,0,0,0,0,2,1,0}
+                                         {0,0,0,0,0,0,4,0,0,0,0,0,2,1,0}
                                         };
     int random_lvl[SIZELVL][SIZELVL]{};
     
@@ -98,4 +107,26 @@ struct GameManager{
     }
     //PLAYER
     bool player_alive=false;
+
+    //ENEMIES
+    Entity& createEnemy(EntityManager& EM, int type){
+        auto& enemy = EM.createEntity();
+        enemy.hasTag(Tags::collider | Tags::collisionable | Tags::enemy | Tags::movement);
+        EM.getCMPStorage().addPositionCMP(PositionCMP{0,0,0,0}, enemy);
+
+        switch (type)
+        {
+        case 3: // FANTASMA
+            EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/enemigo_1.png"}, enemy);
+            EM.getCMPStorage().addStatsCMP(StatsCMP{1, 1, 1, 1, 0}, enemy);
+            break;
+        case 4: // GUERRERO
+            EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/enemigo_2.png"}, enemy);
+            EM.getCMPStorage().addStatsCMP(StatsCMP{2, 2, 1, 1, 0}, enemy);
+            break;
+        default:
+            break;
+        }
+        return enemy;
+    }
 };

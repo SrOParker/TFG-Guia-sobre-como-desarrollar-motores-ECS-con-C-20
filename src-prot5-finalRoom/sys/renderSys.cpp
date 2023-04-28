@@ -21,9 +21,14 @@ void RenderSystem::renderMap(Map& map){
 }
 
 void RenderSystem::renderStatsInterface(EntityManager& EM, Map& map){
-    DrawTexture(map.interface.health, (float)(SPRITE_DIMENSIONS/2), (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*1), WHITE);
-    DrawTexture(map.interface.damage, (float)(SPRITE_DIMENSIONS/2), (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*2.5)), WHITE);
-    DrawTexture(map.interface.step, (float)(SPRITE_DIMENSIONS/2), (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*4)), WHITE);
-    DrawTexture(map.interface.pickaxe, (float)(SPRITE_DIMENSIONS/2), (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*5.5)), WHITE);
-    DrawTexture(map.interface.critical, (float)(SPRITE_DIMENSIONS/2), (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*7)), WHITE);
+    DrawTexture(map.interface.health, (float)(SPRITE_DIMENSIONS/2), 
+                (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*1), WHITE);
+    DrawTexture(map.interface.damage, (float)(SPRITE_DIMENSIONS/2), 
+                (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*2.5)), WHITE);
+    DrawTexture(map.interface.step, (float)(SPRITE_DIMENSIONS/2), 
+                (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*4)), WHITE);
+    DrawTexture(map.interface.pickaxe, (float)(SPRITE_DIMENSIONS/2), 
+                (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*5.5)), WHITE);
+    DrawTexture(map.interface.critical, (float)(SPRITE_DIMENSIONS/2), 
+                (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*7)), WHITE);
 }
