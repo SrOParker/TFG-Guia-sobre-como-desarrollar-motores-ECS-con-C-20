@@ -8,6 +8,7 @@ struct Interface{
     Texture2D pickaxe;
     Texture2D step;
     Texture2D critical;
+    Texture2D point;
 };
 
 struct Map{
@@ -23,6 +24,7 @@ struct Map{
         interface.pickaxe   = LoadTexture("sprites/pico.png");
         interface.step      = LoadTexture("sprites/velocidad.png");
         interface.critical  = LoadTexture("sprites/critico.png");
+        interface.point     = LoadTexture("sprites/Punto.png");
     }
     ~Map(){
         UnloadTexture(map);
@@ -31,5 +33,6 @@ struct Map{
         UnloadTexture(interface.pickaxe);
         UnloadTexture(interface.step);
         UnloadTexture(interface.critical);
+        UnloadTexture(interface.point);
     }
 };

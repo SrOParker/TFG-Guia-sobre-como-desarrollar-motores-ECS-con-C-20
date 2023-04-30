@@ -25,6 +25,6 @@ struct Game{
     IASystem iaSys{};
 
     bool  turn          = true;
-    float time          = 0.5;
+    float time          = 0.25;
     float turn_seconds  = 0.0;
 };
