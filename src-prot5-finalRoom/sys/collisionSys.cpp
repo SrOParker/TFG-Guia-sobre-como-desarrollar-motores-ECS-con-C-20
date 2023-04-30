@@ -41,7 +41,10 @@ void CollisionSystem::collisionWithWall(EntityManager& EM, Entity& ent, Entity& 
         if(ent.hasTag(Tags::player)){    // Hit Wall
             auto& statsPlayer = EM.getCMPStorage().getStatsCMP(ent);
             auto& statsWall = EM.getCMPStorage().getStatsCMP(wall);
+            auto& rendWall = EM.getCMPStorage().getRenderCMP(wall);
             statsWall.health -= statsPlayer.pickaxe;
+            rendWall.actual_frame++;
+            rendWall.frame = {(float)(rendWall.actual_frame*32), 0,(float)32, (float)rendWall.sprite.height};
             if(statsWall.health <= 0){
                 //Eliminar Entidad
                 EM.removeEntity(wall);

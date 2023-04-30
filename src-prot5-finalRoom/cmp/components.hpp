@@ -4,7 +4,8 @@
 struct RenderCMP {
     const char* route {};
     Texture2D sprite { LoadTexture(route) };
-    Rectangle  frame = {0,0,(float)sprite.width, (float)sprite.height};
+    int actual_frame = 0;
+    Rectangle  frame = {(float)(actual_frame*32), 0,(float)32, (float)sprite.height};
     static int const mask{0b1};
 };
 

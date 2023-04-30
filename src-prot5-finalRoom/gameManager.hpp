@@ -38,20 +38,20 @@ struct GameManager{
         //Create lvl
         for (int i = 0; i < 15;i++){
             for(int j = 0; j < 15; j++){
-                if (matrix_lvl[i][j] == 2){
+                if (matrix_lvl[i][j] == 1){
                     auto& rock_wall = EM.createEntity();
                     rock_wall.addTag(Tags::wall | Tags::collisionable);
-                    EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_2.png"}, rock_wall);
+                    EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_2-sheet.png"}, rock_wall);
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
-                    EM.getCMPStorage().addStatsCMP(StatsCMP{6,0,0,0,0}, rock_wall);
+                    EM.getCMPStorage().addStatsCMP(StatsCMP{4,0,0,0,0}, rock_wall);
 
                     actual_lvl[i][j]=2;
-                }else if(matrix_lvl[i][j] == 1){
+                }else if(matrix_lvl[i][j] == 2){
                     auto& rock_wall = EM.createEntity();
                     rock_wall.addTag(Tags::wall | Tags::collisionable);
-                    EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_1.png"}, rock_wall);
+                    EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_1-sheet.png"}, rock_wall);
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
-                    EM.getCMPStorage().addStatsCMP(StatsCMP{3,0,0,0,0}, rock_wall);
+                    EM.getCMPStorage().addStatsCMP(StatsCMP{4,0,0,0,0}, rock_wall);
 
                     actual_lvl[i][j]=1;
                 }else if(!player_alive && matrix_lvl[i][j] == 0){
