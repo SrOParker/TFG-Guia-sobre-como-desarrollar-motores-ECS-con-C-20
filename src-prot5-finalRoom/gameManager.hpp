@@ -111,7 +111,7 @@ struct GameManager{
 
     void createPlayer(EntityManager& EM, int x, int y){
         auto& player = EM.createEntity();
-        player.addTag(Tags::player | Tags::movement | Tags::collider);
+        player.addTag(Tags::player | Tags::movement | Tags::collider | Tags::collisionable);
         EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/player.png"}, player);
         EM.getCMPStorage().addPositionCMP(PositionCMP{x,y}, player);
         EM.getCMPStorage().addInputCMP(InputCMP{}, player);

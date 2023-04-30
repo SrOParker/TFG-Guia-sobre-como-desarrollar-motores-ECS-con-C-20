@@ -11,6 +11,7 @@ void Game::run(){
         if (turn){
             inpSys.update(EM, turn);
             turn_seconds = 0;
+            
         }else{
             if (turn_seconds >= time){
                 iaSys.update(EM, GM);

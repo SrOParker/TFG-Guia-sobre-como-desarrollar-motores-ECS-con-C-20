@@ -7,10 +7,10 @@ void IASystem::update(EntityManager& EM, GameManager& GM){
         if (isPlayerNearby(player_pos, enemy_pos, 5)){
             //PLAYER CERCA
             //PERSEGUIR
-            enemyMovement(EM,GM, player_pos, enemy_pos, 0);
+            enemyMovement(GM, player_pos, enemy_pos, 0);
         }else{
             //PLAYER LEJOS - PATRON
-            enemyMovement(EM, GM, player_pos, enemy_pos, 1);
+            enemyMovement(GM, player_pos, enemy_pos, 1);
         }
 
     }, cmpMaskToCheck, tagMaskToCheck);
@@ -22,7 +22,7 @@ bool IASystem::isPlayerNearby(PositionCMP& player_pos, PositionCMP& enemy_pos, i
     return (deltaX <= distance && deltaY <= distance);
 }
 
-void IASystem::enemyMovement(EntityManager& EM, GameManager& GM, PositionCMP& player_pos, PositionCMP& enemy_pos, int mode){
+void IASystem::enemyMovement(GameManager& GM, PositionCMP& player_pos, PositionCMP& enemy_pos, int mode){
     if( mode == 0 ){
         // Persecución del jugador
             if (player_pos.posX > enemy_pos.posX && !tryMoving(enemy_pos.posX, enemy_pos.posY, 1, 0, GM)) {

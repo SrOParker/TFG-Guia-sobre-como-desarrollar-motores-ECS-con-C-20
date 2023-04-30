@@ -9,7 +9,10 @@ struct CollisionSystem{
 
     void update(EntityManager& EM);
     private:
-    void collisionWithWall(EntityManager& EM, Entity& player, Entity& wall, PositionCMP& collider, PositionCMP& collisionable);
+    bool checkCollision(PositionCMP& pos1, PositionCMP& pos2);
+    void collisionWithWall(EntityManager& EM, Entity& player, Entity& wall, PositionCMP& collider);
+    void collisionWithEnemy(EntityManager& EM, Entity& player, Entity& enemy);
+    void collisionWithPlayer(EntityManager& EM, Entity& player, Entity& enemy);
 
     int cmpMaskToCheck = PositionCMP::mask; // | StatsCMP::mask; (we can add more with OR operation)
     int tagMaskToCheck = Tags::collider;
