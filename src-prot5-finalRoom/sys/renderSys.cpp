@@ -24,7 +24,7 @@ void RenderSystem::renderStatsInterface(EntityManager& EM, Map& map){
     auto& statsPlayer = EM.getCMPStorage().getStatsCMP(EM.getPlayer());
     DrawTexture(map.interface.health, (float)(SPRITE_DIMENSIONS/2), 
                 (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*1), WHITE);
-    for (int i=0; i<statsPlayer.health; i++){
+    for (int i=0;i<statsPlayer.health; i++){
         DrawTexture(map.interface.point, (float)(SPRITE_DIMENSIONS+20) + i*10, (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*1.45), WHITE);
     }
     DrawTexture(map.interface.damage, (float)(SPRITE_DIMENSIONS/2), 
@@ -47,4 +47,5 @@ void RenderSystem::renderStatsInterface(EntityManager& EM, Map& map){
     for (int i=0; i<statsPlayer.critical_hit; i+=5){
         DrawTexture(map.interface.point, (float)(SPRITE_DIMENSIONS+20) + i*10, (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*7.45), WHITE);
     }
+
 }

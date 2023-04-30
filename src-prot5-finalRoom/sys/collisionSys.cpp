@@ -1,7 +1,7 @@
 #include "collisionSys.hpp"
 
 
-void CollisionSystem::update(EntityManager& EM){
+void CollisionSystem::update(EntityManager& EM, GameManager& GM){
     EM.forallMatching([&](Entity& e){
         auto& posCMPOfCollider = EM.getCMPStorage().getPositionCMP(e);
         if(posCMPOfCollider.velX!=0 || posCMPOfCollider.velY!=0){
@@ -9,11 +9,11 @@ void CollisionSystem::update(EntityManager& EM){
                 auto& posCMPOfCollisionable = EM.getCMPStorage().getPositionCMP(coll);
                 if(checkCollision(posCMPOfCollider, posCMPOfCollisionable)){
                     if(coll.hasTag(Tags::wall)){
-                        collisionWithWall(EM, e, coll, posCMPOfCollider);
+                        collisionWithWall(EM, GM, e, coll, posCMPOfCollider);
                     }else if(!e.hasTag(Tags::enemy) && coll.hasTag(Tags::enemy)){
                         collisionWithEnemy(EM, e, coll);
                     }else if(e.hasTag(Tags::enemy) && coll.hasTag(Tags::player)){
-                        collisionWithPlayer(EM, e, coll);
+                        collisionWithPlayer(EM, coll, e);
                     }
                 }
 
@@ -23,7 +23,7 @@ void CollisionSystem::update(EntityManager& EM){
     },cmpMaskToCheck, tagMaskToCheck);
 }
 
-void CollisionSystem::collisionWithWall(EntityManager& EM, Entity& ent, Entity& wall, PositionCMP& collider){
+void CollisionSystem::collisionWithWall(EntityManager& EM, GameManager& GM, Entity& ent, Entity& wall, PositionCMP& collider){
     //Check Collision
     collider.velX = 0;
     collider.velY = 0;
@@ -32,11 +32,13 @@ void CollisionSystem::collisionWithWall(EntityManager& EM, Entity& ent, Entity& 
         auto& statsPlayer = EM.getCMPStorage().getStatsCMP(ent);
         auto& statsWall = EM.getCMPStorage().getStatsCMP(wall);
         auto& rendWall = EM.getCMPStorage().getRenderCMP(wall);
+        auto& posWall = EM.getCMPStorage().getPositionCMP(wall);
         statsWall.health -= statsPlayer.pickaxe;
         rendWall.actual_frame++;
         rendWall.frame = {(float)(rendWall.actual_frame*32), 0,(float)32, (float)rendWall.sprite.height};
         if(statsWall.health <= 0){
             //Eliminar Entidad
+            GM.getActualMap()[posWall.posY][posWall.posX] = 0;
             EM.removeEntity(wall);
         }
     }

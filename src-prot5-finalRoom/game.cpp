@@ -19,7 +19,7 @@ void Game::run(){
                 turn_seconds = 0;
             }
         }
-        collSys.update(EM);
+        collSys.update(EM, GM);
         posSys.update(EM);
         rendSys.update(EM, map);
         EndDrawing();

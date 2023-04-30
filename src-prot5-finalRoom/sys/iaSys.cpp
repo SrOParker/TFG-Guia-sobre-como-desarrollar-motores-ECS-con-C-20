@@ -4,7 +4,7 @@ void IASystem::update(EntityManager& EM, GameManager& GM){
     EM.forallMatching([&](Entity& e){
         auto& enemy_pos = EM.getCMPStorage().getPositionCMP(e);
         auto& player_pos = EM.getCMPStorage().getPositionCMP(EM.getPlayer());
-        if (isPlayerNearby(player_pos, enemy_pos, 5)){
+        if (isPlayerNearby(player_pos, enemy_pos, 3)){
             //PLAYER CERCA
             //PERSEGUIR
             enemyMovement(GM, player_pos, enemy_pos, 0);

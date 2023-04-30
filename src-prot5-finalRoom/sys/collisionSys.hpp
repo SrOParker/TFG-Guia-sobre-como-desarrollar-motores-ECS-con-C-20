@@ -7,10 +7,10 @@
 
 struct CollisionSystem{
 
-    void update(EntityManager& EM);
+    void update(EntityManager& EM, GameManager& GM);
     private:
     bool checkCollision(PositionCMP& pos1, PositionCMP& pos2);
-    void collisionWithWall(EntityManager& EM, Entity& player, Entity& wall, PositionCMP& collider);
+    void collisionWithWall(EntityManager& EM, GameManager& GM, Entity& player, Entity& wall, PositionCMP& collider);
     void collisionWithEnemy(EntityManager& EM, Entity& player, Entity& enemy);
     void collisionWithPlayer(EntityManager& EM, Entity& player, Entity& enemy);
 
