@@ -28,8 +28,13 @@ struct GameManager{
         }
     }
 
-    private:
+    auto& getActualMap(){
+        return actual_lvl;
+    }
+    private:    
+    int actual_lvl[SIZELVL][SIZELVL]{};
     void generateLvl(EntityManager& EM, const int matrix_lvl[SIZELVL][SIZELVL]){
+        
         //Create lvl
         for (int i = 0; i < 15;i++){
             for(int j = 0; j < 15; j++){
@@ -39,14 +44,20 @@ struct GameManager{
                     EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_2.png"}, rock_wall);
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
                     EM.getCMPStorage().addStatsCMP(StatsCMP{6,0,0,0,0}, rock_wall);
+
+                    actual_lvl[i][j]=2;
                 }else if(matrix_lvl[i][j] == 1){
                     auto& rock_wall = EM.createEntity();
                     rock_wall.addTag(Tags::wall | Tags::collisionable);
                     EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_1.png"}, rock_wall);
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
                     EM.getCMPStorage().addStatsCMP(StatsCMP{3,0,0,0,0}, rock_wall);
+
+                    actual_lvl[i][j]=1;
                 }else if(!player_alive && matrix_lvl[i][j] == 0){
                     createPlayer(EM,j,i);
+
+                    actual_lvl[i][j]=0;
                 }else if(matrix_lvl[i][j] == 3){
                     Entity& enemy = createEnemy(EM,3);
                     auto& pos = EM.getCMPStorage().getPositionCMP(enemy);
@@ -56,6 +67,8 @@ struct GameManager{
                     Entity& enemy = createEnemy(EM,4);
                     auto& pos = EM.getCMPStorage().getPositionCMP(enemy);
                     pos.posX = j; pos.posY = i;
+                }else{
+                    actual_lvl[i][j] = 0;
                 }
             }
         }
@@ -77,16 +90,17 @@ struct GameManager{
     }
     
     //NIVELES
+
     const int map_lvl1[SIZELVL][SIZELVL]{{0,0,0,0,0,0,0,0,0,1,1,2,2,0,0},
                                          {1,1,1,2,0,0,0,0,0,0,0,0,0,0,1},
                                          {0,0,1,2,0,0,0,0,0,0,0,0,0,0,1},
                                          {0,0,1,2,0,0,0,0,0,0,0,0,0,0,2},
-                                         {4,0,0,0,0,0,1,1,0,0,3,0,0,0,1},
+                                         {4,0,0,0,0,0,1,1,0,0,0,0,0,3,1},
                                          {0,0,0,0,0,1,1,1,1,0,0,0,0,0,0},
                                          {0,0,0,2,2,2,2,2,2,2,2,2,0,0,0},
                                          {0,1,0,2,1,2,0,0,0,0,1,0,0,0,1},
                                          {0,1,0,2,1,1,0,0,0,0,1,0,0,0,0},
-                                         {0,1,0,2,0,2,3,0,0,0,2,0,0,0,1},
+                                         {0,1,0,2,0,2,0,0,0,3,2,0,0,0,1},
                                          {0,1,0,1,0,1,0,0,0,0,2,0,0,0,0},
                                          {0,1,0,1,0,2,0,0,0,0,1,0,0,0,0},
                                          {0,0,0,0,0,0,0,0,0,0,1,0,2,2,2},
@@ -94,7 +108,7 @@ struct GameManager{
                                          {0,0,0,0,0,0,4,0,0,0,0,0,2,1,0}
                                         };
     int random_lvl[SIZELVL][SIZELVL]{};
-    
+
     void createPlayer(EntityManager& EM, int x, int y){
         auto& player = EM.createEntity();
         player.addTag(Tags::player | Tags::movement | Tags::collider);
@@ -107,20 +121,21 @@ struct GameManager{
     }
     //PLAYER
     bool player_alive=false;
-
     //ENEMIES
     Entity& createEnemy(EntityManager& EM, int type){
         auto& enemy = EM.createEntity();
-        enemy.hasTag(Tags::collider | Tags::collisionable | Tags::enemy | Tags::movement);
+        enemy.addTag(Tags::collider | Tags::collisionable | Tags::enemy | Tags::movement);
         EM.getCMPStorage().addPositionCMP(PositionCMP{0,0,0,0}, enemy);
 
         switch (type)
         {
         case 3: // FANTASMA
+            enemy.addTag(Tags::ghost);
             EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/enemigo_1.png"}, enemy);
             EM.getCMPStorage().addStatsCMP(StatsCMP{1, 1, 1, 1, 0}, enemy);
             break;
-        case 4: // GUERRERO
+        case 4: // SOLDADO
+            enemy.addTag(Tags::soldier);
             EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/enemigo_2.png"}, enemy);
             EM.getCMPStorage().addStatsCMP(StatsCMP{2, 2, 1, 1, 0}, enemy);
             break;
@@ -130,3 +145,7 @@ struct GameManager{
         return enemy;
     }
 };
+
+// MAPA ACTUAL
+// PASAR A COLISIONES
+// DETECTAR COLISIONES CON EL ENEMIGO

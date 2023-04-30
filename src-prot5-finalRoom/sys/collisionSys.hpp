@@ -1,8 +1,9 @@
 #pragma once
 #include <iostream>
 #include "../man/manentity.hpp"
+#include "../gameManager.hpp"
 #include <raylib.h>
-
+#include "../map.hpp"
 
 struct CollisionSystem{
 

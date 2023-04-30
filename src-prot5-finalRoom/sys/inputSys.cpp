@@ -1,43 +1,28 @@
 #include "inputSys.hpp"
 
 
-void InputSystem::update(EntityManager& EM){
+void InputSystem::update(EntityManager& EM, bool& turn){
     EM.forallMatching([&](Entity& e){
         auto& input = EM.getCMPStorage().getInputCMP(e);
         auto& pos = EM.getCMPStorage().getPositionCMP(e);
-        keyPressed(input, pos);
+        keyPressed(input, pos, turn);
     }, cmpMaskToCheck, tagMaskToCheck);
 }
 
-void InputSystem::keyPressed(InputCMP& input, PositionCMP& pos){
+void InputSystem::keyPressed(InputCMP& input, PositionCMP& pos, bool& turn){
     
-    if ((IsKeyDown(input.KeyW) && pos.posY > 0) && (!controlKeys.w_pressed)){
+    if ((IsKeyDown(input.KeyW) && pos.posY > 0) ){
         pos.velY -= 1;
-        controlKeys.w_pressed = true;
-    }else if ((IsKeyDown(input.KeyA) && pos.posX > 0) && (!controlKeys.a_pressed)){
+        turn = false;
+    }else if ((IsKeyDown(input.KeyA) && pos.posX > 0) ){
         pos.velX -= 1;
-        controlKeys.a_pressed = true;
-    }else if ((IsKeyDown(input.KeyS) && pos.posY < 14) && (!controlKeys.s_pressed)){
+        turn = false;
+    }else if ((IsKeyDown(input.KeyS) && pos.posY < 14) ){
         pos.velY += 1;
-        controlKeys.s_pressed = true;
-    }else if ((IsKeyDown(input.KeyD) && pos.posX < 14) && (!controlKeys.d_pressed)){
+        turn = false;
+    }else if ((IsKeyDown(input.KeyD) && pos.posX < 14) ){
         pos.velX += 1;
-        controlKeys.d_pressed = true;
+        turn = false;
     } 
-    
-    controlKeys.ControlKeys();
-}
-
-
-void Pressed::ControlKeys(){
-    if(IsKeyReleased(KEY_W)){
-        w_pressed = false;
-    }else if(IsKeyReleased(KEY_A)){
-        a_pressed = false;
-    }else if(IsKeyReleased(KEY_S)){
-        s_pressed = false;
-    }else if(IsKeyReleased(KEY_D)){
-        d_pressed = false;
-    }
 }
 

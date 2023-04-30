@@ -43,6 +43,21 @@ struct EntityManager{
         CS.removeRenderCMP(e);
         CS.removeStatsCMP(e);
     }
+    void removeAllEntities(){
+        for(int i = 0;i < (int)entities.size();i++){
+            removeEntity(entities[i]);
+        }entities.clear();
+    }
+    
+    Entity& getPlayer(){
+        for (Entity& e: entities){
+            if(e.hasTag(Tags::player)){
+                return e;
+            } 
+        }
+
+        throw std::runtime_error(" No player created ");
+    }
 
     std::vector<Entity>& getEntityVector(){
         return entities;

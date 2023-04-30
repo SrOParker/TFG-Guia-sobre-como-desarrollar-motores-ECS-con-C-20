@@ -5,9 +5,19 @@ void Game::run(){
     createEntities();
     SetTargetFPS(60);
     while (!WindowShouldClose()){
+        turn_seconds += GetFrameTime();
         BeginDrawing();
         ClearBackground(RAYWHITE);
-        inpSys.update(EM);
+        if (turn){
+            inpSys.update(EM, turn);
+            turn_seconds = 0;
+        }else{
+            if (turn_seconds >= time){
+                iaSys.update(EM, GM);
+                turn=true;
+                turn_seconds = 0;
+            }
+        }
         collSys.update(EM);
         posSys.update(EM);
         rendSys.update(EM, map);

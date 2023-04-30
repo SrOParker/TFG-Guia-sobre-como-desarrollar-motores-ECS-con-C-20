@@ -16,33 +16,37 @@ void CollisionSystem::update(EntityManager& EM){
     },cmpMaskToCheck, tagMaskToCheck);
 }
 
-void CollisionSystem::collisionWithWall(EntityManager& EM, Entity& player, Entity& wall, PositionCMP& collider, PositionCMP& collisionable){
+void CollisionSystem::collisionWithWall(EntityManager& EM, Entity& ent, Entity& wall, PositionCMP& collider, PositionCMP& collisionable){
     //Check Collision
-    bool removedVelocity = false;
+    bool removedHorizontal = false;
+    bool removedVertical = false;
     if((collider.velX != 0) && 
         (collisionable.posY == collider.posY && 
         ((collider.posX + collider.velX) == collisionable.posX))){
         //Try moving HORIZONTAL (Key A OR D)
+        removedHorizontal = true;
         collider.velX = 0;
-        removedVelocity = true;
                
-    }else if((collider.velY != 0) && 
+    }
+    
+    if((collider.velY != 0) && 
         (collisionable.posX == collider.posX && 
         ((collider.posY + collider.velY) == collisionable.posY))){
-        //Try moving top (Key W OR S)
+        //Try moving VERTICAL (Key W OR S)
+        removedVertical = true;
         collider.velY = 0;
-        removedVelocity = true;
-    }
-    /////////////////////////MAL
-    // Hit Wall
-    if(removedVelocity){
-        auto& statsPlayer = EM.getCMPStorage().getStatsCMP(player);
-        auto& statsWall = EM.getCMPStorage().getStatsCMP(wall);
-        statsWall.health -= statsPlayer.pickaxe;
-        if(statsWall.health <= 0){
-            //Eliminar Entidad
-            EM.removeEntity(wall);
-        }
     }
 
+    if(removedHorizontal || removedVertical){
+        if(ent.hasTag(Tags::player)){    // Hit Wall
+            auto& statsPlayer = EM.getCMPStorage().getStatsCMP(ent);
+            auto& statsWall = EM.getCMPStorage().getStatsCMP(wall);
+            statsWall.health -= statsPlayer.pickaxe;
+            if(statsWall.health <= 0){
+                //Eliminar Entidad
+                EM.removeEntity(wall);
+            }
+        }
+    }
 }
+

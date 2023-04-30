@@ -41,4 +41,6 @@ struct Tags{
     static int const movement       {0b00001000};
     static int const collider       {0b00010000};
     static int const collisionable  {0b00100000};
+    static int const ghost          {0b01000000};
+    static int const soldier        {0b10000000};
 };
