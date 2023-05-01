@@ -12,6 +12,7 @@ struct IASystem{
     bool isPlayerNearby(PositionCMP& player, PositionCMP& enemy_pos, int distance);
     void enemyMovement(GameManager& GM, PositionCMP& player_pos, PositionCMP& enemy_pos, int mode);
     bool tryMoving(int posX, int posY, int velX, int velY, GameManager& GM); 
+    
     int cmpMaskToCheck = PositionCMP::mask; // | StatsCMP::mask; (we can add more with OR operation)
     int tagMaskToCheck = Tags::movement | Tags::enemy | Tags::collider;
 };

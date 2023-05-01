@@ -20,7 +20,7 @@ void Game::run(){
             }
         }
         collSys.update(EM, GM);
-        posSys.update(EM);
+        posSys.update(EM, GM);
         rendSys.update(EM, map);
         EndDrawing();
     }
@@ -28,6 +28,6 @@ void Game::run(){
 
 void Game::createEntities(){
 
-    //GM.selectLvlAndGenerate(EM,GM.Lvl1);
-    GM.selectLvlAndGenerate(EM, GM.Lvl1);
+    GM.selectLvlAndGenerate(EM,GM.Random);
+    //GM.selectLvlAndGenerate(EM, GM.Random);
 }

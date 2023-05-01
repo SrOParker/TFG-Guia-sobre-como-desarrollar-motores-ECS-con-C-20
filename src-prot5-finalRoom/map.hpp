@@ -9,6 +9,7 @@ struct Interface{
     Texture2D step;
     Texture2D critical;
     Texture2D point;
+    Texture2D pointVoid;
 };
 
 struct Map{
@@ -25,6 +26,7 @@ struct Map{
         interface.step      = LoadTexture("sprites/velocidad.png");
         interface.critical  = LoadTexture("sprites/critico.png");
         interface.point     = LoadTexture("sprites/Punto.png");
+        interface.pointVoid = LoadTexture("sprites/Punto_Vacio.png");
     }
     ~Map(){
         UnloadTexture(map);
@@ -34,5 +36,6 @@ struct Map{
         UnloadTexture(interface.step);
         UnloadTexture(interface.critical);
         UnloadTexture(interface.point);
+        UnloadTexture(interface.pointVoid);
     }
 };

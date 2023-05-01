@@ -14,6 +14,8 @@ void CollisionSystem::update(EntityManager& EM, GameManager& GM){
                         collisionWithEnemy(EM, e, coll);
                     }else if(e.hasTag(Tags::enemy) && coll.hasTag(Tags::player)){
                         collisionWithPlayer(EM, coll, e);
+                    }else if(coll.hasTag(Tags::chest)){
+                        collisionWithChest(EM, e, coll);
                     }
                 }
 
@@ -103,4 +105,11 @@ void CollisionSystem::collisionWithPlayer(EntityManager& EM, Entity& player, Ent
         
     }
 
+}
+
+void CollisionSystem::collisionWithChest(EntityManager& EM, Entity& player, Entity& chest){
+    std::cout<< "Chest"<<"\n";
+    auto& posPlayer = EM.getCMPStorage().getPositionCMP(player);
+    posPlayer.velX = 0;
+    posPlayer.velY = 0;
 }

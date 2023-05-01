@@ -20,7 +20,7 @@ struct GameManager{
             generateLvl(EM, map_lvl1);
             break;
         case LvlNumber::Random:
-            generateRandomMatrix(15,15);
+            generateRandomMatrix(15,15,2,2);
             generateLvl(EM,random_lvl);
             break;
         default:
@@ -43,7 +43,7 @@ struct GameManager{
                     rock_wall.addTag(Tags::wall | Tags::collisionable);
                     EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_2-sheet.png"}, rock_wall);
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
-                    EM.getCMPStorage().addStatsCMP(StatsCMP{4,0,0,0,0}, rock_wall);
+                    EM.getCMPStorage().addStatsCMP(StatsCMP{4,4,0,0,0,0}, rock_wall);
 
                     actual_lvl[i][j]=2;
                 }else if(matrix_lvl[i][j] == 2){
@@ -51,7 +51,7 @@ struct GameManager{
                     rock_wall.addTag(Tags::wall | Tags::collisionable);
                     EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/piedra_1-sheet.png"}, rock_wall);
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
-                    EM.getCMPStorage().addStatsCMP(StatsCMP{4,0,0,0,0}, rock_wall);
+                    EM.getCMPStorage().addStatsCMP(StatsCMP{4,4,0,0,0,0}, rock_wall);
 
                     actual_lvl[i][j]=1;
                 }else if(!player_alive && matrix_lvl[i][j] == 0){
@@ -67,16 +67,19 @@ struct GameManager{
                     Entity& enemy = createEnemy(EM,4);
                     auto& pos = EM.getCMPStorage().getPositionCMP(enemy);
                     pos.posX = j; pos.posY = i;
+                }else if(matrix_lvl[i][j] == 5){
+                    createChest(EM,i,j);
                 }else{
                     actual_lvl[i][j] = 0;
                 }
             }
         }
     }
-    
+
     //First Parameter high is too many rocks of type 1
     //Second Parameter high is too many rocks of type 2
-    void generateRandomMatrix(int rockProbability1, int rockProbability2){
+    void generateRandomMatrix(int rockProbability1, int rockProbability2, int numEnemy3, int numEnemy4){
+        
         for (int i = 0; i < 15;i++){
             for(int j = 0; j < 15; j++){
                 int num = rand()%100;
@@ -87,25 +90,51 @@ struct GameManager{
                 }
             }
         }
+
+        bool chest = false;
+        while(!chest){
+            int num  = rand() % 15;
+            int num2 = rand() % 15;
+            if(random_lvl[num][num2]== 0){
+                random_lvl[num][num2] = 5;
+                chest=true;
+            } 
+        }
+
+        int x{},y{}, enemies3{}, enemies4{};
+        while(numEnemy3 != enemies3 || numEnemy4 != enemies4){
+            x = rand() % 15;
+            y = rand() % 15;
+            if(numEnemy3 != enemies3 && random_lvl[x][y] == 0){
+                random_lvl[x][y] = 3;
+                enemies3 ++;
+            }
+            x = rand() % 15;
+            y = rand() % 15;
+            if(numEnemy4 != enemies4 && random_lvl[x][y] == 0){
+                random_lvl[x][y] = 4;
+                enemies4 ++;
+            }
+        }
     }
     
     //NIVELES
 
-    const int map_lvl1[SIZELVL][SIZELVL]{{0,0,0,0,0,0,0,0,0,1,1,2,2,0,0},
+    const int map_lvl1[SIZELVL][SIZELVL]{{0,0,0,0,0,0,5,0,0,1,1,2,2,0,0},
                                          {1,1,1,2,0,0,0,0,0,0,0,0,0,0,1},
                                          {0,0,1,2,0,0,0,0,0,0,0,0,0,0,1},
                                          {0,0,1,2,0,0,0,0,0,0,0,0,0,0,2},
-                                         {0,0,0,0,0,0,1,1,0,0,0,0,0,3,1},
+                                         {4,0,0,0,0,0,1,1,0,0,0,0,0,0,1},
                                          {0,0,0,0,0,1,1,1,1,0,0,0,0,0,0},
-                                         {4,0,0,2,2,2,2,2,2,2,2,2,0,0,0},
+                                         {0,0,0,2,2,2,2,2,2,2,2,2,0,0,0},
                                          {0,1,0,2,1,2,0,0,0,0,1,0,0,0,1},
                                          {0,1,0,2,1,1,0,0,0,0,1,0,0,0,0},
-                                         {0,1,0,2,0,2,0,0,0,3,2,0,0,0,1},
+                                         {0,1,0,2,0,2,0,0,0,0,2,0,0,0,1},
                                          {0,1,0,1,0,1,0,0,0,0,2,0,0,0,0},
                                          {0,1,0,1,0,2,0,0,0,0,1,0,0,0,0},
                                          {0,0,0,0,0,0,0,0,0,0,1,0,2,2,2},
                                          {0,0,1,1,1,1,0,0,0,0,0,0,2,0,1},
-                                         {0,0,0,0,0,0,4,0,0,0,0,0,2,1,0}
+                                         {0,0,0,0,0,0,0,0,0,0,0,0,2,1,0}
                                         };
     int random_lvl[SIZELVL][SIZELVL]{};
 
@@ -115,7 +144,7 @@ struct GameManager{
         EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/player.png"}, player);
         EM.getCMPStorage().addPositionCMP(PositionCMP{x,y}, player);
         EM.getCMPStorage().addInputCMP(InputCMP{}, player);
-        EM.getCMPStorage().addStatsCMP(StatsCMP{3,1,1,5,1}, player);
+        EM.getCMPStorage().addStatsCMP(StatsCMP{3,3,1,1,5,1}, player);
 
         player_alive=true;
     }
@@ -132,20 +161,25 @@ struct GameManager{
         case 3: // FANTASMA
             enemy.addTag(Tags::ghost);
             EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/enemigo_1.png"}, enemy);
-            EM.getCMPStorage().addStatsCMP(StatsCMP{1, 1, 1, 1, 0}, enemy);
+            EM.getCMPStorage().addStatsCMP(StatsCMP{1, 1, 1, 1, 1, 0}, enemy);
             break;
         case 4: // SOLDADO
             enemy.addTag(Tags::soldier);
             EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/enemigo_2.png"}, enemy);
-            EM.getCMPStorage().addStatsCMP(StatsCMP{2, 2, 1, 1, 0}, enemy);
+            EM.getCMPStorage().addStatsCMP(StatsCMP{2, 2, 2, 1, 1, 0}, enemy);
             break;
         default:
             break;
         }
         return enemy;
     }
+
+    void createChest(EntityManager& EM, int x, int y){
+        auto& chest = EM.createEntity();
+        chest.addTag(Tags::chest | Tags::collisionable);
+        EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/chest.png"}, chest);
+        EM.getCMPStorage().addPositionCMP(PositionCMP{y,x,0,0}, chest);
+    }
+
 };
 
-// MAPA ACTUAL
-// PASAR A COLISIONES
-// DETECTAR COLISIONES CON EL ENEMIGO
