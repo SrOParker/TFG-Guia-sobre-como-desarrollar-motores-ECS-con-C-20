@@ -70,5 +70,11 @@ void RenderSystem::renderObjects(EntityManager& EM){
                 WHITE);
         nextCol++;
     }, RenderCMP::mask, Tags::object);
+}
 
+void RenderSystem::renderMenu(Map& map){
+    DrawTexture(map.menu.initial_Menu,
+    (float)(0),
+    (float)(0),
+    WHITE);
 }

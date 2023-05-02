@@ -151,6 +151,11 @@ struct ComponentStorage{
     }
     Slotmap<InputCMP, 1> inputStorage{};
 
-    
+    void clearAllStorage(){
+        renderStorage.clear();
+        statsStorage.clear();
+        inputStorage.clear();
+        positionStorage.clear();
+    }
 
 };

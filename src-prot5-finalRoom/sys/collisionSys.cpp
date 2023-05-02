@@ -1,7 +1,7 @@
 #include "collisionSys.hpp"
 
 
-void CollisionSystem::update(EntityManager& EM, GameManager& GM){
+void CollisionSystem::update(EntityManager& EM, GameManager& GM, bool& playing_lvl, States& state, int& lvlActual){
     EM.forallMatching([&](Entity& e){
         auto& posCMPOfCollider = EM.getCMPStorage().getPositionCMP(e);
         if(posCMPOfCollider.velX!=0 || posCMPOfCollider.velY!=0){
@@ -13,13 +13,13 @@ void CollisionSystem::update(EntityManager& EM, GameManager& GM){
                     }else if(!e.hasTag(Tags::enemy) && coll.hasTag(Tags::enemy)){
                         collisionWithEnemy(EM, GM, e, coll);
                     }else if(e.hasTag(Tags::enemy) && coll.hasTag(Tags::player)){
-                        collisionWithPlayer(EM, coll, e);
+                        collisionWithPlayer(EM, coll, e, state, playing_lvl);
                     }else if(e.hasTag(Tags::player) && coll.hasTag(Tags::chest) && !coll.hasTag(Tags::object_picked)){
                         collisionWithChest(EM, GM, e, coll);
                     }else if(e.hasTag(Tags::player) && coll.hasTag(Tags::key)){
                         collisionWithKey(EM, GM, e, coll);
                     }else if(e.hasTag(Tags::player | Tags::has_key) && coll.hasTag(Tags::door)){
-                        collisionWithDoor(EM);
+                        collisionWithDoor(playing_lvl, lvlActual);
                     }
                 }
 
@@ -99,7 +99,7 @@ bool CollisionSystem::checkCollision(PositionCMP& pos1, PositionCMP& pos2){
     return false;
 }
 
-void CollisionSystem::collisionWithPlayer(EntityManager& EM, Entity& player, Entity& enemy){
+void CollisionSystem::collisionWithPlayer(EntityManager& EM, Entity& player, Entity& enemy, States& state, bool& playing_lvl){
     auto& player_stats  = EM.getCMPStorage().getStatsCMP(player);
     auto& enemy_pos     = EM.getCMPStorage().getPositionCMP(enemy);
     auto& enemy_stats   = EM.getCMPStorage().getStatsCMP(enemy);
@@ -111,7 +111,8 @@ void CollisionSystem::collisionWithPlayer(EntityManager& EM, Entity& player, Ent
     if(player_stats.health <= 0){
         //Morimos
         std::cout<< "Has muerto\n";
-        
+        state = States::MENU;
+        playing_lvl = false;
     }
 
 }
@@ -136,7 +137,7 @@ void CollisionSystem::collisionWithChest(EntityManager& EM, GameManager& GM, Ent
     auto& rendChest = EM.getCMPStorage().getRenderCMP(chest);
     rendChest.actual_frame++;
     rendChest.frame = {(float)(rendChest.actual_frame*32), 0,(float)32, (float)rendChest.sprite.height};
-    //chest.addTag(Tags::object_picked);
+    chest.addTag(Tags::object_picked);
 }
 
 void CollisionSystem::collisionWithKey(EntityManager& EM, GameManager& GM, Entity& player, Entity& key){
@@ -147,8 +148,9 @@ void CollisionSystem::collisionWithKey(EntityManager& EM, GameManager& GM, Entit
     player.addTag(Tags::has_key);
 }
 
-void CollisionSystem::collisionWithDoor(EntityManager& EM){
+void CollisionSystem::collisionWithDoor(bool& playing_lvl, int& lvlActual){
     //go to other lvl
     std::cout<< "Charging lvl2"<<"\n";
-    EM.removeAllEntities();
+    lvlActual++;
+    playing_lvl = false;
 }

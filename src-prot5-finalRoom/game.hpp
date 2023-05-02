@@ -7,14 +7,13 @@
 #include "sys/positionSys.hpp"
 #include "sys/collisionSys.hpp"
 #include "sys/iaSys.hpp"
+#include "states.hpp"
 struct Game{
     
     void run();
-
-
+    void reset(int config);
+    void startNormalGame(Map& map);
     private:
-    void createEntities();
-
     EntityManager EM{100};
     GameManager GM{};
     
@@ -23,7 +22,9 @@ struct Game{
     PositionSystem posSys{};
     CollisionSystem collSys{};
     IASystem iaSys{};
-
+    States state{States::MENU};
+    int   lvlActual     = 0;
+    bool  playing_lvl   = false;
     bool  turn          = true;
     float time          = 0.25;
     float turn_seconds  = 0.0;

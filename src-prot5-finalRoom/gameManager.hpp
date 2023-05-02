@@ -10,21 +10,27 @@ struct GameManager{
         Lvl1,
         Random
     };
-    
+    void killPlayer(){
+        player_alive = false;
+    }
     void selectLvlAndGenerate(EntityManager& EM, int lvl){
+        clearMatrix();
         switch (lvl)
         {
         case LvlNumber::Lvl0:
             /* code */
+            generateLvl(EM, map_lvl0);
             break;
         case LvlNumber::Lvl1:
             generateLvl(EM, map_lvl1);
             break;
         case LvlNumber::Random:
             generateRandomMatrix(15,15,2,2);
-            generateLvl(EM,random_lvl);
+            generateLvl(EM, random_lvl);
             break;
         default:
+            generateRandomMatrix(15,15,3,2);
+            generateLvl(EM, random_lvl);
             break;
         }
     }
@@ -76,7 +82,7 @@ struct GameManager{
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
                     EM.getCMPStorage().addStatsCMP(StatsCMP{4,4,0,0,0,0}, rock_wall);
 
-                    actual_lvl[i][j]=2;
+                    actual_lvl[i][j]=1;
                 }else if(matrix_lvl[i][j] == 2){
                     auto& rock_wall = EM.createEntity();
                     rock_wall.addTag(Tags::wall | Tags::collisionable);
@@ -84,7 +90,7 @@ struct GameManager{
                     EM.getCMPStorage().addPositionCMP(PositionCMP{j,i,0,0}, rock_wall);
                     EM.getCMPStorage().addStatsCMP(StatsCMP{4,4,0,0,0,0}, rock_wall);
 
-                    actual_lvl[i][j]=1;
+                    actual_lvl[i][j]=2;
                 }else if(!player_alive && matrix_lvl[i][j] == 0){
                     createPlayer(EM,j,i);
 
@@ -172,6 +178,21 @@ struct GameManager{
             }
         }
     }
+    const int map_lvl0[SIZELVL][SIZELVL]{{0,0,0,0,0,0,0,2,2,2,2,0,0,0,0},
+                                         {1,2,1,1,0,0,0,0,0,0,0,0,0,0,0},
+                                         {1,3,0,0,0,0,0,0,0,0,2,2,0,0,0},
+                                         {1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                         {1,0,1,2,2,2,0,0,0,0,0,0,1,2,6},
+                                         {1,0,1,0,0,0,0,0,0,0,0,0,0,0,1},
+                                         {0,0,0,0,0,0,0,0,1,1,1,0,1,2,3},
+                                         {0,0,0,0,0,2,2,2,2,0,0,0,0,0,0},
+                                         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                         {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+                                         {1,1,1,0,0,1,2,2,1,0,0,0,0,0,0},
+                                         {1,2,2,0,0,1,2,1,1,0,0,0,0,0,0},
+                                         {0,1,0,0,0,0,0,0,0,0,0,0,2,2,0},
+                                         {0,0,0,0,0,0,0,0,0,0,0,0,2,7,0},
+                                         {1,1,1,0,0,1,1,1,0,0,1,1,1,0,0}};
     const int map_lvl1[SIZELVL][SIZELVL]{{0,0,0,0,0,0,5,0,0,1,1,2,2,0,0},
                                          {1,1,1,2,0,0,0,0,0,0,0,0,0,0,1},
                                          {0,0,1,2,0,0,0,0,0,0,0,0,0,0,1},
@@ -243,6 +264,15 @@ struct GameManager{
         door.addTag(Tags::collisionable | Tags::door);
         EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/puerta.png"}, door);
         EM.getCMPStorage().addPositionCMP(PositionCMP{y,x,0,0}, door);
+    }
+
+    void clearMatrix(){
+        for(int i = 0; i < 15; i++){
+            for( int j=0; j<15; j++){
+                actual_lvl[i][j] = 0; 
+                random_lvl[i][j] = 0;
+            }
+        }
     }
 };
 

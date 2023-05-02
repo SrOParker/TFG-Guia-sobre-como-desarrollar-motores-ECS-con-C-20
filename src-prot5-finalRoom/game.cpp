@@ -2,14 +2,64 @@
 #include <array>
 void Game::run(){
     Map map{};
-    createEntities();
     SetTargetFPS(60);
     while (!WindowShouldClose()){
+        switch (state) {
+            case States::MENU:
+                reset(0);
+                BeginDrawing();
+                ClearBackground(RAYWHITE);
+                rendSys.renderMenu(map);
+                inpSys.menuKeys(States::MENU, state);
+                EndDrawing(); 
+                break;
+            case States::GAME:
+                reset(1);
+                GM.selectLvlAndGenerate(EM , lvlActual);
+                playing_lvl = true;
+                startNormalGame(map);
+                break;
+            case States::WIKI:
+
+                break;
+            case States::ENDGAME:
+
+                break;
+        }
+    }
+}
+void Game::reset(int config){
+    std::cout <<"------- ANTES DE BORRAR --------\n";
+    std::cout << "RENDER SLOT: " << EM.getCMPStorage().renderStorage.size()<<"\n";
+    std::cout << "STATS  SLOT: " << EM.getCMPStorage().statsStorage.size()<<"\n";
+    std::cout << "POSITI SLOT: " << EM.getCMPStorage().positionStorage.size()<<"\n";
+    std::cout << "INPUT  SLOT: " << EM.getCMPStorage().inputStorage.size()<<"\n";
+    std::cout << "ENTITIES   : " << EM.getEntityVector().size()<<"\n";
+    GM.killPlayer();
+    EM.removeAllEntities();
+    EM.getCMPStorage().clearAllStorage();
+    if (config == 0){
+        lvlActual = 0;
+        playing_lvl = false;
+        state = MENU;
+    }
+
+    std::cout <<"------- DESPUES DE BORRAR --------\n";
+    std::cout << "RENDER SLOT: " << EM.getCMPStorage().renderStorage.size()<<"\n";
+    std::cout << "STATS  SLOT: " << EM.getCMPStorage().statsStorage.size()<<"\n";
+    std::cout << "POSITI SLOT: " << EM.getCMPStorage().positionStorage.size()<<"\n";
+    std::cout << "INPUT  SLOT: " << EM.getCMPStorage().inputStorage.size()<<"\n";
+    std::cout << "ENTITIES   : " << EM.getEntityVector().size()<<"\n";
+
+}
+
+void Game::startNormalGame(Map& map){
+    while (playing_lvl){
         turn_seconds += GetFrameTime();
         BeginDrawing();
         ClearBackground(RAYWHITE);
         if (turn){
-            inpSys.update(EM, turn);
+            inpSys.update(EM, turn, playing_lvl, state);
             turn_seconds = 0;
             
         }else{
@@ -19,15 +69,9 @@ void Game::run(){
                 turn_seconds = 0;
             }
         }
-        collSys.update(EM, GM);
+        collSys.update(EM, GM, playing_lvl, state, lvlActual);
         posSys.update(EM, GM);
         rendSys.update(EM, map);
         EndDrawing();
-
     }
-}
-
-void Game::createEntities(){
-    GM.selectLvlAndGenerate(EM,GM.Lvl1);
-    //GM.selectLvlAndGenerate(EM, GM.Random);
 }

@@ -44,9 +44,10 @@ struct EntityManager{
         CS.removeStatsCMP(e);
     }
     void removeAllEntities(){
-        for(int i = 0;i < (int)entities.size();i++){
-            removeEntity(entities[i]);
-        }entities.clear();
+        forall([&](Entity& e){
+            removeEntity(e);
+        });
+        entities.clear();
     }
     
     Entity& getPlayer(){

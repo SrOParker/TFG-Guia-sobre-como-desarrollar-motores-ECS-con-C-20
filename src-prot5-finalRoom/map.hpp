@@ -2,6 +2,10 @@
 #pragma once
 #include <raylib.h>
 
+struct Menu{
+    Texture2D initial_Menu;
+};
+
 struct Interface{
     Texture2D health;
     Texture2D damage;
@@ -16,6 +20,7 @@ struct Map{
     Texture2D map;
     Rectangle size_map;
     Interface interface;
+    Menu      menu;
     Map(){
         map = LoadTexture("sprites/background_interface.png");
         size_map = {0,0, (float)map.width, (float)map.height};
@@ -27,6 +32,8 @@ struct Map{
         interface.critical  = LoadTexture("sprites/critico.png");
         interface.point     = LoadTexture("sprites/Punto.png");
         interface.pointVoid = LoadTexture("sprites/Punto_Vacio.png");
+
+        menu.initial_Menu   = LoadTexture("sprites/menu.png");
     }
     ~Map(){
         UnloadTexture(map);
@@ -37,5 +44,6 @@ struct Map{
         UnloadTexture(interface.critical);
         UnloadTexture(interface.point);
         UnloadTexture(interface.pointVoid);
+        UnloadTexture(menu.initial_Menu);
     }
 };

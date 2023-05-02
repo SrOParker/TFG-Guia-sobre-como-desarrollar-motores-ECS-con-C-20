@@ -13,6 +13,7 @@
 struct RenderSystem{
 
     void update(EntityManager& EM, Map& map);
+    void renderMenu(Map& map);
     private:
     void renderMap(Map& map);
     void renderStatsInterface(EntityManager& EM, Map& map);
