@@ -11,13 +11,13 @@ void CollisionSystem::update(EntityManager& EM, GameManager& GM){
                     if(coll.hasTag(Tags::wall)){
                         collisionWithWall(EM, GM, e, coll, posCMPOfCollider);
                     }else if(!e.hasTag(Tags::enemy) && coll.hasTag(Tags::enemy)){
-                        collisionWithEnemy(EM, e, coll);
+                        collisionWithEnemy(EM, GM, e, coll);
                     }else if(e.hasTag(Tags::enemy) && coll.hasTag(Tags::player)){
                         collisionWithPlayer(EM, coll, e);
                     }else if(e.hasTag(Tags::player) && coll.hasTag(Tags::chest) && !coll.hasTag(Tags::object_picked)){
                         collisionWithChest(EM, GM, e, coll);
                     }else if(e.hasTag(Tags::player) && coll.hasTag(Tags::key)){
-                        collisionWithKey(EM, e, coll);
+                        collisionWithKey(EM, GM, e, coll);
                     }else if(e.hasTag(Tags::player | Tags::has_key) && coll.hasTag(Tags::door)){
                         collisionWithDoor(EM);
                     }
@@ -50,11 +50,11 @@ void CollisionSystem::collisionWithWall(EntityManager& EM, GameManager& GM, Enti
     }
 }
 
-void CollisionSystem::collisionWithEnemy(EntityManager& EM, Entity& player, Entity& enemy){
+void CollisionSystem::collisionWithEnemy(EntityManager& EM,GameManager& GM, Entity& player, Entity& enemy){
     auto& player_stats  = EM.getCMPStorage().getStatsCMP(player);
     auto& player_pos    = EM.getCMPStorage().getPositionCMP(player);
     auto& enemy_stats   = EM.getCMPStorage().getStatsCMP(enemy);
-
+    auto& enemy_pos     = EM.getCMPStorage().getPositionCMP(enemy);
     player_pos.velX = 0;
     player_pos.velY = 0;
     if(rand() % 100 <= player_stats.critical_hit){
@@ -64,6 +64,7 @@ void CollisionSystem::collisionWithEnemy(EntityManager& EM, Entity& player, Enti
     }
 
     if (enemy_stats.health <= 0){
+        GM.getActualMap()[enemy_pos.posY][enemy_pos.posX] = 0;
         EM.removeEntity(enemy);
     }
 
@@ -72,9 +73,14 @@ void CollisionSystem::collisionWithEnemy(EntityManager& EM, Entity& player, Enti
 bool CollisionSystem::checkCollision(PositionCMP& pos1, PositionCMP& pos2){
     bool removedHorizontal = false;
     bool removedVertical = false;
+    int directionX=0;
+    if(pos1.velX<0){ directionX= -1; }else{ directionX = 1; }
+    int directionY=0;
+    if(pos1.velY<0){ directionY= -1; }else{ directionY = 1; }
+            
     if((pos1.velX != 0) && 
         (pos2.posY == pos1.posY && 
-        ((pos1.posX + pos1.velX) == pos2.posX))){
+        ((pos1.posX + directionX) == pos2.posX))){
         //Try moving HORIZONTAL (Key A OR D)
         removedHorizontal = true;
         pos1.velX = 0;
@@ -82,7 +88,7 @@ bool CollisionSystem::checkCollision(PositionCMP& pos1, PositionCMP& pos2){
     
     if((pos1.velY != 0) && 
         (pos2.posX == pos1.posX && 
-        ((pos1.posY + pos1.velY) == pos2.posY))){
+        ((pos1.posY + directionY) == pos2.posY))){
         //Try moving VERTICAL (Key W OR S)
         removedVertical = true;
         pos1.velY = 0;
@@ -130,11 +136,12 @@ void CollisionSystem::collisionWithChest(EntityManager& EM, GameManager& GM, Ent
     auto& rendChest = EM.getCMPStorage().getRenderCMP(chest);
     rendChest.actual_frame++;
     rendChest.frame = {(float)(rendChest.actual_frame*32), 0,(float)32, (float)rendChest.sprite.height};
-    chest.addTag(Tags::object_picked);
+    //chest.addTag(Tags::object_picked);
 }
 
-void CollisionSystem::collisionWithKey(EntityManager& EM, Entity& player, Entity& key){
+void CollisionSystem::collisionWithKey(EntityManager& EM, GameManager& GM, Entity& player, Entity& key){
     auto& posKey = EM.getCMPStorage().getPositionCMP(key);
+    GM.getActualMap()[posKey.posY][posKey.posX] = 0;
     posKey.posX =  16;
     posKey.posY =   0;
     player.addTag(Tags::has_key);

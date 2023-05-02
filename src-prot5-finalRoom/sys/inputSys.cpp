@@ -3,25 +3,25 @@
 
 void InputSystem::update(EntityManager& EM, bool& turn){
     EM.forallMatching([&](Entity& e){
-        auto& input = EM.getCMPStorage().getInputCMP(e);
-        auto& pos = EM.getCMPStorage().getPositionCMP(e);
-        keyPressed(input, pos, turn);
+        keyPressed(EM,e,turn);
     }, cmpMaskToCheck, tagMaskToCheck);
 }
 
-void InputSystem::keyPressed(InputCMP& input, PositionCMP& pos, bool& turn){
-    
+void InputSystem::keyPressed(EntityManager& EM,Entity& e, bool& turn){
+    auto& input = EM.getCMPStorage().getInputCMP(e);
+    auto& pos   = EM.getCMPStorage().getPositionCMP(e);
+    auto& stats = EM.getCMPStorage().getStatsCMP(e);
     if ((IsKeyDown(input.KeyW) && pos.posY > 0) ){
-        pos.velY -= 1;
+        pos.velY = -stats.step;
         turn = false;
     }else if ((IsKeyDown(input.KeyA) && pos.posX > 0) ){
-        pos.velX -= 1;
+        pos.velX = -stats.step;
         turn = false;
     }else if ((IsKeyDown(input.KeyS) && pos.posY < 14) ){
-        pos.velY += 1;
+        pos.velY = stats.step;
         turn = false;
     }else if ((IsKeyDown(input.KeyD) && pos.posX < 14) ){
-        pos.velX += 1;
+        pos.velX = stats.step;
         turn = false;
     } 
 }

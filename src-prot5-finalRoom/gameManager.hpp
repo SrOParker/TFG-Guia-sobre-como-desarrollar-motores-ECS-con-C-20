@@ -93,17 +93,20 @@ struct GameManager{
                     Entity& enemy = createEnemy(EM,3);
                     auto& pos = EM.getCMPStorage().getPositionCMP(enemy);
                     pos.posX = j; pos.posY = i;
-
+                   
                 }else if(matrix_lvl[i][j] == 4){
                     Entity& enemy = createEnemy(EM,4);
                     auto& pos = EM.getCMPStorage().getPositionCMP(enemy);
                     pos.posX = j; pos.posY = i;
                 }else if(matrix_lvl[i][j] == 5){
                     createChest(EM,i,j);
+                    actual_lvl[i][j]=5;
                 }else if(matrix_lvl[i][j] == 6){
                     createKey(EM,i,j);
+                    actual_lvl[i][j]=6;
                 }else if(matrix_lvl[i][j] == 7){
                     createDoor(EM,i,j);
+                    actual_lvl[i][j]=7;
                 }else{
                     actual_lvl[i][j] = 0;
                 }
@@ -229,7 +232,6 @@ struct GameManager{
         EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/chest.png"}, chest);
         EM.getCMPStorage().addPositionCMP(PositionCMP{y,x,0,0}, chest);
     }
-
     void createKey(EntityManager& EM, int x, int y){
         auto& key = EM.createEntity();
         key.addTag(Tags::collisionable | Tags::key);
