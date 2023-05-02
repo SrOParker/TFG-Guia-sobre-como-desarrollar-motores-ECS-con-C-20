@@ -100,6 +100,10 @@ struct GameManager{
                     pos.posX = j; pos.posY = i;
                 }else if(matrix_lvl[i][j] == 5){
                     createChest(EM,i,j);
+                }else if(matrix_lvl[i][j] == 6){
+                    createKey(EM,i,j);
+                }else if(matrix_lvl[i][j] == 7){
+                    createDoor(EM,i,j);
                 }else{
                     actual_lvl[i][j] = 0;
                 }
@@ -127,6 +131,25 @@ struct GameManager{
                 random_lvl[num][num2] = 5;
                 chest=true;
 
+            } 
+        }
+
+        bool door = false;
+        while(!door){
+            int num  = rand() % 15;
+            int num2 = rand() % 15;
+            if(random_lvl[num][num2] == 0){
+                random_lvl[num][num2] = 7;
+                door=true;
+            } 
+        }
+        bool key = false;
+        while(!key){
+            int num  = rand() % 15;
+            int num2 = rand() % 15;
+            if(random_lvl[num][num2] == 0){
+                random_lvl[num][num2] = 6;
+                key=true;
             } 
         }
 
@@ -159,8 +182,8 @@ struct GameManager{
                                          {0,1,0,1,0,1,0,0,0,0,2,0,0,0,0},
                                          {0,1,0,1,0,2,0,0,0,0,1,0,0,0,0},
                                          {0,0,0,0,0,0,0,0,0,0,1,0,2,2,2},
-                                         {0,0,1,1,1,1,0,0,0,0,0,0,2,0,1},
-                                         {0,0,0,0,0,0,0,0,0,0,0,0,2,1,0}
+                                         {0,0,1,1,1,1,0,0,0,0,0,0,2,6,1},
+                                         {0,0,0,0,0,0,0,0,0,0,0,0,2,1,7}
                                         };
     int random_lvl[SIZELVL][SIZELVL]{};
     int actual_lvl[SIZELVL][SIZELVL]{};
@@ -207,5 +230,17 @@ struct GameManager{
         EM.getCMPStorage().addPositionCMP(PositionCMP{y,x,0,0}, chest);
     }
 
+    void createKey(EntityManager& EM, int x, int y){
+        auto& key = EM.createEntity();
+        key.addTag(Tags::collisionable | Tags::key);
+        EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/llave.png"}, key);
+        EM.getCMPStorage().addPositionCMP(PositionCMP{y,x,0,0}, key);
+    }
+    void createDoor(EntityManager& EM, int x, int y){
+        auto& door = EM.createEntity();
+        door.addTag(Tags::collisionable | Tags::door);
+        EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/puerta.png"}, door);
+        EM.getCMPStorage().addPositionCMP(PositionCMP{y,x,0,0}, door);
+    }
 };
 

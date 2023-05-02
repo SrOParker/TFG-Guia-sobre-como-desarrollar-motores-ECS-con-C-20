@@ -28,6 +28,6 @@ void Game::run(){
 }
 
 void Game::createEntities(){
-    GM.selectLvlAndGenerate(EM,GM.Random);
+    GM.selectLvlAndGenerate(EM,GM.Lvl1);
     //GM.selectLvlAndGenerate(EM, GM.Random);
 }

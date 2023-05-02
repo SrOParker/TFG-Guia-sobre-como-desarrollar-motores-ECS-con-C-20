@@ -1,8 +1,10 @@
 #include "renderSys.hpp"
 void RenderSystem::update(EntityManager& EM, Map& map){
     renderMap(map);
-    renderStatsInterface(EM, map);
-    renderObjects(EM);
+    if(EM.getEntityVector().size()>0){
+        renderStatsInterface(EM, map);
+        renderObjects(EM);
+    }
     EM.forallMatching([&](Entity&e){
         auto& render    = EM.getCMPStorage().getRenderCMP(e); 
         auto& pos       = EM.getCMPStorage().getPositionCMP(e);

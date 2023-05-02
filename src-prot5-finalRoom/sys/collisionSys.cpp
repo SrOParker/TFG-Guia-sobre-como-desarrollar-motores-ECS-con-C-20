@@ -16,6 +16,10 @@ void CollisionSystem::update(EntityManager& EM, GameManager& GM){
                         collisionWithPlayer(EM, coll, e);
                     }else if(e.hasTag(Tags::player) && coll.hasTag(Tags::chest) && !coll.hasTag(Tags::object_picked)){
                         collisionWithChest(EM, GM, e, coll);
+                    }else if(e.hasTag(Tags::player) && coll.hasTag(Tags::key)){
+                        collisionWithKey(EM, e, coll);
+                    }else if(e.hasTag(Tags::player | Tags::has_key) && coll.hasTag(Tags::door)){
+                        collisionWithDoor(EM);
                     }
                 }
 
@@ -127,4 +131,17 @@ void CollisionSystem::collisionWithChest(EntityManager& EM, GameManager& GM, Ent
     rendChest.actual_frame++;
     rendChest.frame = {(float)(rendChest.actual_frame*32), 0,(float)32, (float)rendChest.sprite.height};
     chest.addTag(Tags::object_picked);
+}
+
+void CollisionSystem::collisionWithKey(EntityManager& EM, Entity& player, Entity& key){
+    auto& posKey = EM.getCMPStorage().getPositionCMP(key);
+    posKey.posX =  16;
+    posKey.posY =   0;
+    player.addTag(Tags::has_key);
+}
+
+void CollisionSystem::collisionWithDoor(EntityManager& EM){
+    //go to other lvl
+    std::cout<< "Charging lvl2"<<"\n";
+    EM.removeAllEntities();
 }

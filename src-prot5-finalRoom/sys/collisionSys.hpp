@@ -14,7 +14,9 @@ struct CollisionSystem{
     void collisionWithEnemy(EntityManager& EM, Entity& player, Entity& enemy);
     void collisionWithPlayer(EntityManager& EM, Entity& player, Entity& enemy);
     void collisionWithChest(EntityManager& EM, GameManager& GM, Entity& player,  Entity& chest);
-
+    void collisionWithKey(EntityManager& EM, Entity& player, Entity& key);
+    void collisionWithDoor(EntityManager& EM);
+    
     int cmpMaskToCheck = PositionCMP::mask; // | StatsCMP::mask; (we can add more with OR operation)
     int tagMaskToCheck = Tags::collider;
 };
