@@ -149,7 +149,8 @@ struct ComponentStorage{
         }
         return false;
     }
-    Slotmap<InputCMP> inputStorage{};
+    Slotmap<InputCMP, 1> inputStorage{};
 
+    
 
 };

@@ -14,8 +14,8 @@ void CollisionSystem::update(EntityManager& EM, GameManager& GM){
                         collisionWithEnemy(EM, e, coll);
                     }else if(e.hasTag(Tags::enemy) && coll.hasTag(Tags::player)){
                         collisionWithPlayer(EM, coll, e);
-                    }else if(coll.hasTag(Tags::chest)){
-                        collisionWithChest(EM, e, coll);
+                    }else if(e.hasTag(Tags::player) && coll.hasTag(Tags::chest) && !coll.hasTag(Tags::object_picked)){
+                        collisionWithChest(EM, GM, e, coll);
                     }
                 }
 
@@ -44,7 +44,6 @@ void CollisionSystem::collisionWithWall(EntityManager& EM, GameManager& GM, Enti
             EM.removeEntity(wall);
         }
     }
-    
 }
 
 void CollisionSystem::collisionWithEnemy(EntityManager& EM, Entity& player, Entity& enemy){
@@ -107,9 +106,25 @@ void CollisionSystem::collisionWithPlayer(EntityManager& EM, Entity& player, Ent
 
 }
 
-void CollisionSystem::collisionWithChest(EntityManager& EM, Entity& player, Entity& chest){
-    std::cout<< "Chest"<<"\n";
+void CollisionSystem::collisionWithChest(EntityManager& EM, GameManager& GM, Entity& player, Entity& chest){
+    //COLISIONAMOS CON EL OBJETO
     auto& posPlayer = EM.getCMPStorage().getPositionCMP(player);
     posPlayer.velX = 0;
     posPlayer.velY = 0;
+    //GENERAR OBJ ALEATORIAMENTE
+    auto& obj = GM.createObject(EM, rand()%5);
+    //APLICAR SUS ESTADISTICAS AL PLAYER
+    auto& statsPlayer = EM.getCMPStorage().getStatsCMP(player);
+    auto& statsObj    = EM.getCMPStorage().getStatsCMP(obj);
+    statsPlayer.health+=statsObj.health;
+    statsPlayer.maxhealth+=statsObj.maxhealth;
+    statsPlayer.damage += statsObj.damage;
+    statsPlayer.step += statsObj.step;
+    statsPlayer.critical_hit += statsObj.critical_hit;
+    statsPlayer.pickaxe += statsObj.pickaxe;
+    //CAMBIAR SPRITE DEL COFRE Y HACERLO INACCESIBLE
+    auto& rendChest = EM.getCMPStorage().getRenderCMP(chest);
+    rendChest.actual_frame++;
+    rendChest.frame = {(float)(rendChest.actual_frame*32), 0,(float)32, (float)rendChest.sprite.height};
+    chest.addTag(Tags::object_picked);
 }

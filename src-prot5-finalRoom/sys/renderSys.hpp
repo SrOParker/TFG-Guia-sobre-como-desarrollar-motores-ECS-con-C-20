@@ -16,6 +16,7 @@ struct RenderSystem{
     private:
     void renderMap(Map& map);
     void renderStatsInterface(EntityManager& EM, Map& map);
+    void renderObjects(EntityManager& EM);
     int cmpMaskToCheck = RenderCMP::mask | PositionCMP::mask; // | StatsCMP::mask; (we can add more with OR operation)
     int tagMaskToCheck = 0;
 };

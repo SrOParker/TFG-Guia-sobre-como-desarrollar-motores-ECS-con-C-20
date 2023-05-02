@@ -15,7 +15,7 @@ struct Game{
     private:
     void createEntities();
 
-    EntityManager EM{};
+    EntityManager EM{100};
     GameManager GM{};
     
     RenderSystem rendSys{};

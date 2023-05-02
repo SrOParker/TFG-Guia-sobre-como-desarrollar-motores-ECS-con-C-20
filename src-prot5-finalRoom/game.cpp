@@ -23,11 +23,11 @@ void Game::run(){
         posSys.update(EM, GM);
         rendSys.update(EM, map);
         EndDrawing();
+
     }
 }
 
 void Game::createEntities(){
-
     GM.selectLvlAndGenerate(EM,GM.Random);
     //GM.selectLvlAndGenerate(EM, GM.Random);
 }

@@ -66,6 +66,8 @@ struct EntityManager{
     ComponentStorage& getCMPStorage(){
         return CS;
     }
+
+
     private:    
     std::vector<Entity>     entities;
     ComponentStorage CS{};

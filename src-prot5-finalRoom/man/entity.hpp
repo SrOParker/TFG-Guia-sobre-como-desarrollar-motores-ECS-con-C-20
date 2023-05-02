@@ -11,7 +11,7 @@ struct Entity{
     Slotmap<RenderCMP>::key_type renderKey;
     Slotmap<PositionCMP>::key_type positionKey;
     Slotmap<StatsCMP>::key_type statsKey;
-    Slotmap<InputCMP>::key_type inputKey;
+    Slotmap<InputCMP,1>::key_type inputKey;
     
     bool operator==(const Entity& e2) {
         return cmpMask == e2.cmpMask

@@ -10,6 +10,7 @@ struct GameManager{
         Lvl1,
         Random
     };
+    
     void selectLvlAndGenerate(EntityManager& EM, int lvl){
         switch (lvl)
         {
@@ -27,12 +28,42 @@ struct GameManager{
             break;
         }
     }
-
     auto& getActualMap(){
         return actual_lvl;
     }
-    private:    
-    int actual_lvl[SIZELVL][SIZELVL]{};
+    Entity& createObject(EntityManager& EM, int obj){
+        Entity& entity = EM.createEntity();
+        entity.addTag(Tags::object);
+
+        switch (obj)
+        {
+        case Objects::Health :
+            EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/vida.png"}, entity);
+            EM.getCMPStorage().addStatsCMP(StatsCMP{1,1,0,0,0,0}, entity);
+            break;
+        case Objects::Damage : 
+            EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/ataque.png"}, entity);
+            EM.getCMPStorage().addStatsCMP(StatsCMP{0,0,1,0,0,0}, entity);
+            break;
+        case Objects::Steps :
+            EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/velocidad.png"}, entity);
+            EM.getCMPStorage().addStatsCMP(StatsCMP{0,0,0,1,0,0}, entity);
+            break;
+        case Objects::Critical : 
+            EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/critico.png"}, entity);
+            EM.getCMPStorage().addStatsCMP(StatsCMP{0,0,0,0,1,0}, entity);
+            break;
+        case Objects::Pickaxe :
+            EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/pico.png"}, entity);
+            EM.getCMPStorage().addStatsCMP(StatsCMP{0,0,0,0,0,1}, entity);
+            break;
+        default:
+            break;
+        }
+        return entity;
+    }
+    private:
+    //NIVELES    
     void generateLvl(EntityManager& EM, const int matrix_lvl[SIZELVL][SIZELVL]){
         
         //Create lvl
@@ -75,9 +106,6 @@ struct GameManager{
             }
         }
     }
-
-    //First Parameter high is too many rocks of type 1
-    //Second Parameter high is too many rocks of type 2
     void generateRandomMatrix(int rockProbability1, int rockProbability2, int numEnemy3, int numEnemy4){
         
         for (int i = 0; i < 15;i++){
@@ -98,6 +126,7 @@ struct GameManager{
             if(random_lvl[num][num2]== 0){
                 random_lvl[num][num2] = 5;
                 chest=true;
+
             } 
         }
 
@@ -117,9 +146,6 @@ struct GameManager{
             }
         }
     }
-    
-    //NIVELES
-
     const int map_lvl1[SIZELVL][SIZELVL]{{0,0,0,0,0,0,5,0,0,1,1,2,2,0,0},
                                          {1,1,1,2,0,0,0,0,0,0,0,0,0,0,1},
                                          {0,0,1,2,0,0,0,0,0,0,0,0,0,0,1},
@@ -137,7 +163,8 @@ struct GameManager{
                                          {0,0,0,0,0,0,0,0,0,0,0,0,2,1,0}
                                         };
     int random_lvl[SIZELVL][SIZELVL]{};
-
+    int actual_lvl[SIZELVL][SIZELVL]{};
+    //PLAYER
     void createPlayer(EntityManager& EM, int x, int y){
         auto& player = EM.createEntity();
         player.addTag(Tags::player | Tags::movement | Tags::collider | Tags::collisionable);
@@ -148,7 +175,6 @@ struct GameManager{
 
         player_alive=true;
     }
-    //PLAYER
     bool player_alive=false;
     //ENEMIES
     Entity& createEnemy(EntityManager& EM, int type){
@@ -173,7 +199,7 @@ struct GameManager{
         }
         return enemy;
     }
-
+    //OBJECTS
     void createChest(EntityManager& EM, int x, int y){
         auto& chest = EM.createEntity();
         chest.addTag(Tags::chest | Tags::collisionable);

@@ -1,6 +1,5 @@
 #pragma once
 #include <raylib.h>
-
 struct RenderCMP {
     const char* route {};
     Texture2D sprite { LoadTexture(route) };
@@ -37,14 +36,23 @@ struct InputCMP {
 };
 
 struct Tags{
-    static int const player         {0b0000000001};
-    static int const enemy          {0b0000000010};
-    static int const wall           {0b0000000100};
-    static int const movement       {0b0000001000};
-    static int const collider       {0b0000010000};
-    static int const collisionable  {0b0000100000};
-    static int const ghost          {0b0001000000};
-    static int const soldier        {0b0010000000};
-    static int const chest          {0b0100000000};
-    static int const object         {0b1000000000};
+    static int const player         {0b00000000001};
+    static int const enemy          {0b00000000010};
+    static int const wall           {0b00000000100};
+    static int const movement       {0b00000001000};
+    static int const collider       {0b00000010000};
+    static int const collisionable  {0b00000100000};
+    static int const ghost          {0b00001000000};
+    static int const soldier        {0b00010000000};
+    static int const chest          {0b00100000000};
+    static int const object         {0b01000000000};
+    static int const object_picked  {0b10000000000};
+};
+
+enum Objects{
+    Health,
+    Damage,
+    Steps,
+    Critical,
+    Pickaxe
 };

@@ -2,6 +2,7 @@
 void RenderSystem::update(EntityManager& EM, Map& map){
     renderMap(map);
     renderStatsInterface(EM, map);
+    renderObjects(EM);
     EM.forallMatching([&](Entity&e){
         auto& render    = EM.getCMPStorage().getRenderCMP(e); 
         auto& pos       = EM.getCMPStorage().getPositionCMP(e);
@@ -50,7 +51,22 @@ void RenderSystem::renderStatsInterface(EntityManager& EM, Map& map){
     DrawTexture(map.interface.critical, (float)(SPRITE_DIMENSIONS/2), 
                 (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*7)), WHITE);
     for (int i=0; i<statsPlayer.critical_hit; i+=5){
-        DrawTexture(map.interface.point, (float)(SPRITE_DIMENSIONS+20) + i*10, (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*7.45), WHITE);
+        DrawTexture(map.interface.point, (float)(SPRITE_DIMENSIONS+20) + (i/5)*10, (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*7.45), WHITE);
     }
+}
+
+void RenderSystem::renderObjects(EntityManager& EM){
+    int nextRow = 1;
+    int nextCol = 0;
+    EM.forallMatching([&](Entity& e){
+        if(nextCol == 3){ nextRow++; nextCol=0; } 
+        auto& object = e;
+        auto& objectRender = EM.getCMPStorage().getRenderCMP(object);
+        DrawTexture(objectRender.sprite, 
+                (float)((HORIZONTAL_BORDER+HORIZONTAL_MIDDLE + (SPRITE_DIMENSIONS+SPRITE_DIMENSIONS/2 - 3) + (SPRITE_DIMENSIONS*nextCol))), 
+                (float)((VERTICAL_BORDER+(SPRITE_DIMENSIONS*nextRow))), 
+                WHITE);
+        nextCol++;
+    }, RenderCMP::mask, Tags::object);
 
 }
