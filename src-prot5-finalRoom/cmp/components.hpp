@@ -5,7 +5,7 @@ struct RenderCMP {
     Texture2D sprite { LoadTexture(route) };
     int actual_frame = 0;
     Rectangle  frame = {(float)(actual_frame*32), 0,(float)32, (float)sprite.height};
-    static int const mask{0b1};
+    static const int mask{0b1};
 };
 
 struct PositionCMP {
@@ -13,7 +13,7 @@ struct PositionCMP {
     int posY{};
     int velX{};
     int velY{};
-    static int const mask{0b10};
+    static const int mask{0b10};
 };
 
 struct StatsCMP {
@@ -24,7 +24,7 @@ struct StatsCMP {
     int critical_hit{};
     int pickaxe{};
 
-    static int const mask{0b100};
+    static const int mask{0b100};
 };
 
 struct InputCMP {
@@ -32,7 +32,12 @@ struct InputCMP {
     int KeyA = KEY_A;
     int KeyD = KEY_D;
     int KeyS = KEY_S;
-    static int const mask{0b1000};
+    static const int mask{0b1000};
+};
+
+struct ObjectCMP{
+    Objects obj;
+    static const int mask {0b10000};
 };
 
 struct Tags{

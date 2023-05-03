@@ -10,6 +10,16 @@ struct GameManager{
         Lvl1,
         Random
     };
+    void clearInventory(){
+        inventory.clear();
+    }
+    void saveInventory(EntityManager& EM){
+        clearInventory();
+        EM.forallMatching([&](Entity& e){
+            int type_of_cmp = EM.getCMPStorage().getObjectCMP(e).obj;
+            inventory.push_back(type_of_cmp);
+        }, ObjectCMP::mask, Tags::object);
+    }
     void killPlayer(){
         player_alive = false;
     }
@@ -25,11 +35,11 @@ struct GameManager{
             generateLvl(EM, map_lvl1);
             break;
         case LvlNumber::Random:
-            generateRandomMatrix(15,15,2,2);
+            generateRandomMatrix(lvl);
             generateLvl(EM, random_lvl);
             break;
         default:
-            generateRandomMatrix(15,15,3,2);
+            generateRandomMatrix(lvl);
             generateLvl(EM, random_lvl);
             break;
         }
@@ -46,22 +56,27 @@ struct GameManager{
         case Objects::Health :
             EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/vida.png"}, entity);
             EM.getCMPStorage().addStatsCMP(StatsCMP{1,1,0,0,0,0}, entity);
+            EM.getCMPStorage().addObjectCMP(ObjectCMP{Objects::Health},entity);
             break;
         case Objects::Damage : 
             EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/ataque.png"}, entity);
             EM.getCMPStorage().addStatsCMP(StatsCMP{0,0,1,0,0,0}, entity);
+            EM.getCMPStorage().addObjectCMP(ObjectCMP{Objects::Damage},entity);
             break;
         case Objects::Steps :
             EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/velocidad.png"}, entity);
             EM.getCMPStorage().addStatsCMP(StatsCMP{0,0,0,1,0,0}, entity);
+            EM.getCMPStorage().addObjectCMP(ObjectCMP{Objects::Steps},entity);
             break;
         case Objects::Critical : 
             EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/critico.png"}, entity);
             EM.getCMPStorage().addStatsCMP(StatsCMP{0,0,0,0,1,0}, entity);
+            EM.getCMPStorage().addObjectCMP(ObjectCMP{Objects::Critical},entity);
             break;
         case Objects::Pickaxe :
             EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/pico.png"}, entity);
             EM.getCMPStorage().addStatsCMP(StatsCMP{0,0,0,0,0,1}, entity);
+            EM.getCMPStorage().addObjectCMP(ObjectCMP{Objects::Pickaxe},entity);
             break;
         default:
             break;
@@ -119,8 +134,30 @@ struct GameManager{
             }
         }
     }
-    void generateRandomMatrix(int rockProbability1, int rockProbability2, int numEnemy3, int numEnemy4){
-        
+    void generateRandomMatrix(int lvl){
+        //////////////////////////////////////////////
+        //rockProbability1 >>>> more rocks of type 1//
+        //rockProbability2 >>>> more rocks of type 2//
+        //numEnemy3        >>>> more enemies of ty 3//
+        //numEnemy4        >>>> more enemies of ty 4//
+        //////////////////////////////////////////////
+        int rockProbability1{15}, rockProbability2{15}, numEnemy3{3}, numEnemy4{2};
+        if (lvl>=4 && lvl<=6){
+            rockProbability1 += 2;
+            rockProbability2 += 2;
+            numEnemy3 ++;
+            numEnemy4 ++; 
+        }else if( lvl>6 && lvl<=8 ){
+            rockProbability1 += 4;
+            rockProbability2 += 4;
+            numEnemy3 +=2;
+            numEnemy4 +=2; 
+        }else if(lvl>8){
+            rockProbability1 = 22;
+            rockProbability2 = 22;
+            numEnemy3 = 7;
+            numEnemy4 = 5;
+        }
         for (int i = 0; i < 15;i++){
             for(int j = 0; j < 15; j++){
                 int num = rand()%100;
@@ -223,6 +260,7 @@ struct GameManager{
         player_alive=true;
     }
     bool player_alive=false;
+    std::vector<int> inventory{};
     //ENEMIES
     Entity& createEnemy(EntityManager& EM, int type){
         auto& enemy = EM.createEntity();

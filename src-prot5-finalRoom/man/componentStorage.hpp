@@ -151,11 +151,49 @@ struct ComponentStorage{
     }
     Slotmap<InputCMP, 1> inputStorage{};
 
+
+    // OBJECT STORAGE
+    void addObjectCMP(ObjectCMP& cmp, Entity& e){
+        addObjectCMP(ObjectCMP{ cmp }, e);
+    }
+    void addObjectCMP(ObjectCMP&& cmp, Entity& e){
+        //Comprobamos que esa entidad no tenga ese componente ya
+        if(!e.hasComponent(ObjectCMP::mask)){
+            //Añadimos el componente al slotmap y guardamos la llave en la entidad
+            e.objKey = objectStorage.push_back(cmp);
+            //actualizamos la máscara de la entidad
+            e.cmpMask = e.cmpMask | cmp.mask;
+        }else{
+            //Si tiene ese componente lo modificamos y se lo actualizamos
+            auto& cmpposition = objectStorage[e.objKey];
+            cmpposition = cmp;
+        }
+    }
+    ObjectCMP& getObjectCMP(Entity& e){
+        if(!e.hasComponent(ObjectCMP::mask)) throw std::runtime_error(" ObjectCMP no existe ");
+        return objectStorage[e.objKey];  
+    }
+    bool removeObjectCMP(Entity& e){
+        if(e.hasComponent(ObjectCMP::mask)){
+            //Eliminamos el componente de posicion
+            objectStorage.erase(e.objKey);
+            //Actualizamos la mascara de la entidad
+            e.cmpMask = e.cmpMask xor ObjectCMP::mask;
+            //ELiminamos la key de la entidad
+            e.objKey.id = 0;
+            e.objKey.gen= 0;
+            return true;
+        }
+        return false;
+    }
+    Slotmap<ObjectCMP, 50> objectStorage{};
+
     void clearAllStorage(){
         renderStorage.clear();
         statsStorage.clear();
         inputStorage.clear();
         positionStorage.clear();
+        objectStorage.clear();
     }
 
 };

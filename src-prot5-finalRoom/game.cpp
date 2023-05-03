@@ -36,6 +36,7 @@ void Game::reset(int config){
     std::cout << "INPUT  SLOT: " << EM.getCMPStorage().inputStorage.size()<<"\n";
     std::cout << "ENTITIES   : " << EM.getEntityVector().size()<<"\n";
     GM.killPlayer();
+    GM.saveInventory(EM);
     EM.removeAllEntities();
     EM.getCMPStorage().clearAllStorage();
     if (config == 0){
