@@ -20,6 +20,15 @@ struct GameManager{
             inventory.push_back(type_of_cmp);
         }, ObjectCMP::mask, Tags::object);
     }
+    void chargeInventory(EntityManager& EM){
+        for(int i = 0; i < (int)inventory.size(); i++){
+            auto& player = EM.getPlayer();
+            auto& player_stats = EM.getCMPStorage().getStatsCMP(player);
+            auto& obj = createObject(EM, inventory[i]);
+            auto& obj_stats = EM.getCMPStorage().getStatsCMP(obj);
+            player_stats.addStats(obj_stats);
+        }
+    }
     void killPlayer(){
         player_alive = false;
     }
@@ -133,6 +142,7 @@ struct GameManager{
                 }
             }
         }
+        chargeInventory(EM);
     }
     void generateRandomMatrix(int lvl){
         //////////////////////////////////////////////

@@ -24,6 +24,14 @@ struct StatsCMP {
     int critical_hit{};
     int pickaxe{};
 
+    void addStats(StatsCMP obj){
+        health += obj.health;
+        maxhealth += obj.maxhealth;
+        damage += obj.damage;
+        step += obj.step;
+        critical_hit += obj.critical_hit;
+        pickaxe += obj.pickaxe; 
+    }
     static const int mask{0b100};
 };
 
@@ -36,7 +44,7 @@ struct InputCMP {
 };
 
 struct ObjectCMP{
-    Objects obj;
+    int obj;
     static const int mask {0b10000};
 };
 
