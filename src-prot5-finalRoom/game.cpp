@@ -29,12 +29,12 @@ void Game::run(){
     }
 }
 void Game::reset(int config){
-    std::cout <<"------- ANTES DE BORRAR --------\n";
-    std::cout << "RENDER SLOT: " << EM.getCMPStorage().renderStorage.size()<<"\n";
-    std::cout << "STATS  SLOT: " << EM.getCMPStorage().statsStorage.size()<<"\n";
-    std::cout << "POSITI SLOT: " << EM.getCMPStorage().positionStorage.size()<<"\n";
-    std::cout << "INPUT  SLOT: " << EM.getCMPStorage().inputStorage.size()<<"\n";
-    std::cout << "ENTITIES   : " << EM.getEntityVector().size()<<"\n";
+    //std::cout <<"------- ANTES DE BORRAR --------\n";
+    //std::cout << "RENDER SLOT: " << EM.getCMPStorage().renderStorage.size()<<"\n";
+    //std::cout << "STATS  SLOT: " << EM.getCMPStorage().statsStorage.size()<<"\n";
+    //std::cout << "POSITI SLOT: " << EM.getCMPStorage().positionStorage.size()<<"\n";
+    //std::cout << "INPUT  SLOT: " << EM.getCMPStorage().inputStorage.size()<<"\n";
+    //std::cout << "ENTITIES   : " << EM.getEntityVector().size()<<"\n";
     GM.killPlayer();
     GM.saveInventory(EM);
     EM.removeAllEntities();
@@ -44,14 +44,12 @@ void Game::reset(int config){
         playing_lvl = false;
         state = MENU;
     }
-
-    std::cout <<"------- DESPUES DE BORRAR --------\n";
-    std::cout << "RENDER SLOT: " << EM.getCMPStorage().renderStorage.size()<<"\n";
-    std::cout << "STATS  SLOT: " << EM.getCMPStorage().statsStorage.size()<<"\n";
-    std::cout << "POSITI SLOT: " << EM.getCMPStorage().positionStorage.size()<<"\n";
-    std::cout << "INPUT  SLOT: " << EM.getCMPStorage().inputStorage.size()<<"\n";
-    std::cout << "ENTITIES   : " << EM.getEntityVector().size()<<"\n";
-
+    //std::cout <<"------- DESPUES DE BORRAR --------\n";
+    //std::cout << "RENDER SLOT: " << EM.getCMPStorage().renderStorage.size()<<"\n";
+    //std::cout << "STATS  SLOT: " << EM.getCMPStorage().statsStorage.size()<<"\n";
+    //std::cout << "POSITI SLOT: " << EM.getCMPStorage().positionStorage.size()<<"\n";
+    //std::cout << "INPUT  SLOT: " << EM.getCMPStorage().inputStorage.size()<<"\n";
+    //std::cout << "ENTITIES   : " << EM.getEntityVector().size()<<"\n";
 }
 
 void Game::startNormalGame(Map& map){

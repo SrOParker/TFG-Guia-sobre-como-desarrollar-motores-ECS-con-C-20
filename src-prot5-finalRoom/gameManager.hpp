@@ -150,23 +150,27 @@ struct GameManager{
         //rockProbability2 >>>> more rocks of type 2//
         //numEnemy3        >>>> more enemies of ty 3//
         //numEnemy4        >>>> more enemies of ty 4//
+        //chestProb        >>>> less chests         //
         //////////////////////////////////////////////
-        int rockProbability1{15}, rockProbability2{15}, numEnemy3{3}, numEnemy4{2};
+        int rockProbability1{15}, rockProbability2{15}, numEnemy3{3}, numEnemy4{2}, chestProb{10};
         if (lvl>=4 && lvl<=6){
             rockProbability1 += 2;
             rockProbability2 += 2;
             numEnemy3 ++;
             numEnemy4 ++; 
+            chestProb = 3;
         }else if( lvl>6 && lvl<=8 ){
             rockProbability1 += 4;
             rockProbability2 += 4;
             numEnemy3 +=2;
             numEnemy4 +=2; 
+            chestProb = 5;
         }else if(lvl>8){
             rockProbability1 = 22;
             rockProbability2 = 22;
             numEnemy3 = 7;
             numEnemy4 = 5;
+            chestProb = 9;
         }
         for (int i = 0; i < 15;i++){
             for(int j = 0; j < 15; j++){
@@ -180,6 +184,7 @@ struct GameManager{
         }
 
         bool chest = false;
+        if (rand()%chestProb == 1){ chest = true; }
         while(!chest){
             int num  = rand() % 15;
             int num2 = rand() % 15;
@@ -240,21 +245,21 @@ struct GameManager{
                                          {0,1,0,0,0,0,0,0,0,0,0,0,2,2,0},
                                          {0,0,0,0,0,0,0,0,0,0,0,0,2,7,0},
                                          {1,1,1,0,0,1,1,1,0,0,1,1,1,0,0}};
-    const int map_lvl1[SIZELVL][SIZELVL]{{0,0,0,0,0,0,5,0,0,1,1,2,2,0,0},
+    const int map_lvl1[SIZELVL][SIZELVL]{{0,0,0,0,0,0,0,0,0,1,1,2,2,0,0},
                                          {1,1,1,2,0,0,0,0,0,0,0,0,0,0,1},
                                          {0,0,1,2,0,0,0,0,0,0,0,0,0,0,1},
-                                         {0,0,1,2,0,0,0,0,0,0,0,0,0,0,2},
+                                         {0,0,1,2,0,0,0,0,0,0,3,0,0,0,2},
                                          {4,0,0,0,0,0,1,1,0,0,0,0,0,0,1},
                                          {0,0,0,0,0,1,1,1,1,0,0,0,0,0,0},
                                          {0,0,0,2,2,2,2,2,2,2,2,2,0,0,0},
                                          {0,1,0,2,1,2,0,0,0,0,1,0,0,0,1},
                                          {0,1,0,2,1,1,0,0,0,0,1,0,0,0,0},
-                                         {0,1,0,2,0,2,0,0,0,0,2,0,0,0,1},
+                                         {0,1,0,2,5,2,0,0,0,0,2,0,0,0,1},
                                          {0,1,0,1,0,1,0,0,0,0,2,0,0,0,0},
                                          {0,1,0,1,0,2,0,0,0,0,1,0,0,0,0},
                                          {0,0,0,0,0,0,0,0,0,0,1,0,2,2,2},
                                          {0,0,1,1,1,1,0,0,0,0,0,0,2,6,1},
-                                         {0,0,0,0,0,0,0,0,0,0,0,0,2,1,7}
+                                         {0,0,0,0,0,0,0,0,0,0,0,3,2,1,7}
                                         };
     int random_lvl[SIZELVL][SIZELVL]{};
     int actual_lvl[SIZELVL][SIZELVL]{};
