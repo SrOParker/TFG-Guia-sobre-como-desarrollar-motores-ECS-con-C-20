@@ -23,21 +23,30 @@ void InputSystem::keyPressed(EntityManager& EM,Entity& e, bool& turn, bool& play
     }else if ((IsKeyDown(input.KeyD) && pos.posX < 14) ){
         pos.velX = stats.step;
         turn = false;
-    }else if (IsKeyDown(KEY_B)){
+    }else if (IsKeyDown(KEY_ESCAPE)){
         playing_lvl = false;
         state = States::MENU;
     }
+    checkKey();
+}
+void InputSystem::checkKey(){
+    esc_pressed = IsKeyDown(KEY_ESCAPE);
 }
 
-void InputSystem::menuKeys(int config, States& state){
+void InputSystem::menuKeys(int config, States& state, bool& running){
     //configuration for initial menu
     if( config == 0 ){
         if (IsKeyDown(KEY_SPACE)) {
             state = States::GAME;
         }else if (IsKeyDown(KEY_W)){
-            //state = States::WIKI;
-            std::cout << "Wiki\n";
+            state = States::WIKI;
+        }else if (IsKeyDown(KEY_ESCAPE) && esc_pressed == false){
+            running = false;
         }
     }
+    checkKey();
+}
 
+bool InputSystem::escape_pressed(){
+    return esc_pressed;
 }

@@ -15,12 +15,16 @@ struct RenderSystem{
 
     void update(EntityManager& EM, GameManager& GM, Map& map);
     void renderMenu(Map& map);
+    void renderEndGame(Map& map);
+    void renderWiki(EntityManager& EM, Map& map);
     private:
+    void printDescription(EntityManager& EM, Entity& e, float x, float y);
     void renderMap(Map& map);
     void renderStatsInterface(EntityManager& EM, Map& map);
     void renderObjects(EntityManager& EM);
     void renderRound(GameManager& GM);
-
+    void renderCritHit(Map& map, GameManager& GM);
+    
     int cmpMaskToCheck = RenderCMP::mask | PositionCMP::mask; // | StatsCMP::mask; (we can add more with OR operation)
     int tagMaskToCheck = 0;
 };

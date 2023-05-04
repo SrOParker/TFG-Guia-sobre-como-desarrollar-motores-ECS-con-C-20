@@ -59,6 +59,9 @@ void CollisionSystem::collisionWithEnemy(EntityManager& EM,GameManager& GM, Enti
     player_pos.velY = 0;
     if(rand() % 100 <= player_stats.critical_hit){
         enemy_stats.health = enemy_stats.health - player_stats.damage*2;
+        GM.critHit++;
+        GM.posx_crit = enemy_pos.posX;
+        GM.posy_crit = enemy_pos.posY;
     }else{
         enemy_stats.health = enemy_stats.health - player_stats.damage;
     }
@@ -111,7 +114,7 @@ void CollisionSystem::collisionWithPlayer(EntityManager& EM, Entity& player, Ent
     if(player_stats.health <= 0){
         //Morimos
         std::cout<< "Has muerto\n";
-        state = States::MENU;
+        state = States::ENDGAME;
         playing_lvl = false;
     }
 

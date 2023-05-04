@@ -2,16 +2,12 @@
 #include <array>
 void Game::run(){
     Map map{};
+    bool running = true;
     SetTargetFPS(60);
-    while (!WindowShouldClose()){
+    while (running){
         switch (state) {
             case States::MENU:
-                reset(0);
-                BeginDrawing();
-                ClearBackground(RAYWHITE);
-                rendSys.renderMenu(map);
-                inpSys.menuKeys(States::MENU, state);
-                EndDrawing(); 
+                menuScreen(map, running);
                 break;
             case States::GAME:
                 reset(1);
@@ -20,10 +16,10 @@ void Game::run(){
                 startNormalGame(map);
                 break;
             case States::WIKI:
-
+                wikiScreen(map);
                 break;
             case States::ENDGAME:
-
+                endGame(map);
                 break;
         }
     }
@@ -52,6 +48,15 @@ void Game::reset(int config){
     //std::cout << "ENTITIES   : " << EM.getEntityVector().size()<<"\n";
 }
 
+void Game::menuScreen(Map& map, bool& running){
+    reset(0);
+    BeginDrawing();
+    ClearBackground(RAYWHITE);
+    rendSys.renderMenu(map);
+    inpSys.menuKeys(States::MENU, state, running);
+    EndDrawing(); 
+}
+
 void Game::startNormalGame(Map& map){
     while (playing_lvl){
         turn_seconds += GetFrameTime();
@@ -73,4 +78,30 @@ void Game::startNormalGame(Map& map){
         rendSys.update(EM,GM, map);
         EndDrawing();
     }
+}
+
+void Game::endGame(Map& map){
+    turn_seconds = 0;
+    while (turn_seconds < 5 && !IsKeyDown(KEY_ESCAPE) ){
+        turn_seconds += GetFrameTime();
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        rendSys.update(EM,GM, map);
+        rendSys.renderEndGame(map);
+        EndDrawing();
+        inpSys.checkKey();
+    }
+    state = States::MENU;
+}
+
+void Game::wikiScreen(Map& map){
+    GM.createWikiEntities(EM);
+    while (!IsKeyDown(KEY_ESCAPE) ){
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        rendSys.renderWiki(EM, map);
+        EndDrawing(); 
+        inpSys.checkKey();
+    }
+    state = States::MENU;
 }

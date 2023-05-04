@@ -188,12 +188,49 @@ struct ComponentStorage{
     }
     Slotmap<ObjectCMP, 50> objectStorage{};
 
+    // DESCRIPTION STORAGE
+    void addDescriptionCMP(DescriptionCMP& cmp, Entity& e){
+        addDescriptionCMP(DescriptionCMP{ cmp }, e);
+    }
+    void addDescriptionCMP(DescriptionCMP&& cmp, Entity& e){
+        //Comprobamos que esa entidad no tenga ese componente ya
+        if(!e.hasComponent(DescriptionCMP::mask)){
+            //Añadimos el componente al slotmap y guardamos la llave en la entidad
+            e.descriptionKey = descriptionStorage.push_back(cmp);
+            //actualizamos la máscara de la entidad
+            e.cmpMask = e.cmpMask | cmp.mask;
+        }else{
+            //Si tiene ese componente lo modificamos y se lo actualizamos
+            auto& cmpposition = descriptionStorage[e.descriptionKey];
+            cmpposition = cmp;
+        }
+    }
+    DescriptionCMP& getDescriptionCMP(Entity& e){
+        if(!e.hasComponent(DescriptionCMP::mask)) throw std::runtime_error(" DescriptionCMP no existe ");
+        return descriptionStorage[e.descriptionKey];  
+    }
+    bool removeDescriptionCMP(Entity& e){
+        if(e.hasComponent(DescriptionCMP::mask)){
+            //Eliminamos el componente de posicion
+            descriptionStorage.erase(e.descriptionKey);
+            //Actualizamos la mascara de la entidad
+            e.cmpMask = e.cmpMask xor DescriptionCMP::mask;
+            //ELiminamos la key de la entidad
+            e.descriptionKey.id = 0;
+            e.descriptionKey.gen= 0;
+            return true;
+        }
+        return false;
+    }
+    Slotmap<DescriptionCMP> descriptionStorage{};
+
     void clearAllStorage(){
         renderStorage.clear();
         statsStorage.clear();
         inputStorage.clear();
         positionStorage.clear();
         objectStorage.clear();
+        descriptionStorage.clear();
     }
 
 };

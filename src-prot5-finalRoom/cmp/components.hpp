@@ -48,6 +48,11 @@ struct ObjectCMP{
     static const int mask {0b10000};
 };
 
+struct DescriptionCMP{
+    const char* description{""};
+    static const int mask {0b100000};
+};
+
 struct Tags{
     static int const player         {0b00000000000001};
     static int const enemy          {0b00000000000010};

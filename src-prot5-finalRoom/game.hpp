@@ -13,6 +13,9 @@ struct Game{
     void run();
     void reset(int config);
     void startNormalGame(Map& map);
+    void endGame(Map& map);
+    void wikiScreen(Map& map);
+    void menuScreen(Map& map, bool& running);
     private:
     EntityManager EM{100};
     GameManager GM{};

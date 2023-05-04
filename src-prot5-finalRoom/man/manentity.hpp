@@ -43,6 +43,7 @@ struct EntityManager{
         CS.removeRenderCMP(e);
         CS.removeStatsCMP(e);
         CS.removeObjectCMP(e);
+        CS.removeDescriptionCMP(e);
     }
     void removeAllEntities(){
         forall([&](Entity& e){

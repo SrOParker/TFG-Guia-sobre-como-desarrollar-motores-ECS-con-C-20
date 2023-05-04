@@ -101,6 +101,39 @@ struct GameManager{
         }
         return entity;
     }
+    void createWikiEntities(EntityManager& EM){
+        createPlayer(EM,0,0); 
+        EM.getCMPStorage().addDescriptionCMP(DescriptionCMP{"Player"}, EM.getPlayer());
+
+        auto& e3 = createEnemy(EM,3);
+        EM.getCMPStorage().addDescriptionCMP(DescriptionCMP{"Ghost:  Enemy         Stats: 1 health | 1 damage "},e3);
+        auto& e4 = createEnemy(EM,4);
+        EM.getCMPStorage().addDescriptionCMP(DescriptionCMP{"Ghost:  Enemy         Stats: 2 health | 2 damage "},e4);
+
+        auto& obj  = createObject(EM, Objects::Health);  
+        EM.getCMPStorage().addDescriptionCMP(DescriptionCMP{"Object: Health        Stats: +1 health "},obj);
+        auto& obj2 = createObject(EM, Objects::Damage);
+        EM.getCMPStorage().addDescriptionCMP(DescriptionCMP{"Object: Damage        Stats: +1 damage "},obj2);
+        auto& obj3 = createObject(EM, Objects::Critical);
+        EM.getCMPStorage().addDescriptionCMP(DescriptionCMP{"Object: Critical hit  Stats: +5% critical hit "},obj3);
+        auto& obj4 = createObject(EM, Objects::Steps);
+        EM.getCMPStorage().addDescriptionCMP(DescriptionCMP{"Object: Velocity      Stats: +1 jump "},obj4);
+        auto& obj5 = createObject(EM, Objects::Pickaxe);
+        EM.getCMPStorage().addDescriptionCMP(DescriptionCMP{"Object: Pickaxe       Stats: +1 pickaxe "},obj5);
+
+
+        auto& key = createKey(EM,0,0);
+        EM.getCMPStorage().addDescriptionCMP(DescriptionCMP{"Key:   Consumable     You can open a door with this item "},key);
+
+        auto& chest = createChest(EM,0,0);
+        EM.getCMPStorage().addDescriptionCMP(DescriptionCMP{"Chest: Consumable     Gives you a random object "},chest);
+        
+        auto& door = createDoor(EM,0,0);
+        EM.getCMPStorage().addDescriptionCMP(DescriptionCMP{"Door:  Structure      You can open it with a key "},door);
+    }
+    //CRITIC HIT GRAPHICS
+    int critHit{}; 
+    int posx_crit{},posy_crit{};
     private:
     //NIVELES    
     void generateLvl(EntityManager& EM, const int matrix_lvl[SIZELVL][SIZELVL]){
@@ -310,23 +343,26 @@ struct GameManager{
         return enemy;
     }
     //OBJECTS
-    void createChest(EntityManager& EM, int x, int y){
+    Entity& createChest(EntityManager& EM, int x, int y){
         auto& chest = EM.createEntity();
         chest.addTag(Tags::chest | Tags::collisionable);
         EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/chest.png"}, chest);
         EM.getCMPStorage().addPositionCMP(PositionCMP{y,x,0,0}, chest);
+        return chest;
     }
-    void createKey(EntityManager& EM, int x, int y){
+    Entity& createKey(EntityManager& EM, int x, int y){
         auto& key = EM.createEntity();
         key.addTag(Tags::collisionable | Tags::key);
         EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/llave.png"}, key);
         EM.getCMPStorage().addPositionCMP(PositionCMP{y,x,0,0}, key);
+        return key;
     }
-    void createDoor(EntityManager& EM, int x, int y){
+    Entity& createDoor(EntityManager& EM, int x, int y){
         auto& door = EM.createEntity();
         door.addTag(Tags::collisionable | Tags::door);
         EM.getCMPStorage().addRenderCMP(RenderCMP{"sprites/puerta.png"}, door);
         EM.getCMPStorage().addPositionCMP(PositionCMP{y,x,0,0}, door);
+        return door;
     }
 
     void clearMatrix(){
@@ -337,5 +373,7 @@ struct GameManager{
             }
         }
     }
+
+
 };
 

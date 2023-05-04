@@ -13,7 +13,8 @@ struct Entity{
     Slotmap<StatsCMP>::key_type statsKey;
     Slotmap<InputCMP,1>::key_type inputKey;
     Slotmap<ObjectCMP,50>::key_type objKey;
-    
+    Slotmap<DescriptionCMP>::key_type descriptionKey;
+
     bool operator==(const Entity& e2) {
         return cmpMask == e2.cmpMask
             && tagMask == e2.tagMask
@@ -26,7 +27,9 @@ struct Entity{
             && inputKey.gen == e2.inputKey.gen
             && inputKey.id == e2.inputKey.id
             && objKey.gen == e2.objKey.gen
-            && objKey.id == e2.objKey.id;
+            && objKey.id == e2.objKey.id
+            && descriptionKey.gen == e2.descriptionKey.gen
+            && descriptionKey.id == e2.descriptionKey.id;
     }
     
     bool hasComponent(int m){
