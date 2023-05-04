@@ -15,7 +15,7 @@ void Game::run(){
                 break;
             case States::GAME:
                 reset(1);
-                GM.selectLvlAndGenerate(EM , lvlActual);
+                GM.selectLvlAndGenerate(EM , GM.getActualLvl());
                 playing_lvl = true;
                 startNormalGame(map);
                 break;
@@ -40,7 +40,7 @@ void Game::reset(int config){
     EM.removeAllEntities();
     EM.getCMPStorage().clearAllStorage();
     if (config == 0){
-        lvlActual = 0;
+        GM.resetLvl();
         playing_lvl = false;
         state = MENU;
     }
@@ -68,9 +68,9 @@ void Game::startNormalGame(Map& map){
                 turn_seconds = 0;
             }
         }
-        collSys.update(EM, GM, playing_lvl, state, lvlActual);
+        collSys.update(EM, GM, playing_lvl, state);
         posSys.update(EM, GM);
-        rendSys.update(EM, map);
+        rendSys.update(EM,GM, map);
         EndDrawing();
     }
 }

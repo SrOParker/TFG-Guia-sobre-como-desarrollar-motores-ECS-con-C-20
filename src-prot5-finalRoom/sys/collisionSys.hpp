@@ -8,7 +8,7 @@
 
 struct CollisionSystem{
 
-    void update(EntityManager& EM, GameManager& GM, bool& playing_lvl, States& state, int& lvlActual);
+    void update(EntityManager& EM, GameManager& GM, bool& playing_lvl, States& state);
     private:
     bool checkCollision(PositionCMP& pos1, PositionCMP& pos2);
     void collisionWithWall(EntityManager& EM, GameManager& GM, Entity& player, Entity& wall, PositionCMP& collider);
@@ -16,7 +16,7 @@ struct CollisionSystem{
     void collisionWithPlayer(EntityManager& EM, Entity& player, Entity& enemy, States& state, bool& playing_lvl);
     void collisionWithChest(EntityManager& EM, GameManager& GM, Entity& player,  Entity& chest);
     void collisionWithKey(EntityManager& EM, GameManager& GM, Entity& player, Entity& key);
-    void collisionWithDoor(bool& playing_lvl, int& lvlActual);
+    void collisionWithDoor(GameManager& GM, bool& playing_lvl);
     
     int cmpMaskToCheck = PositionCMP::mask; // | StatsCMP::mask; (we can add more with OR operation)
     int tagMaskToCheck = Tags::collider;

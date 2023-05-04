@@ -56,6 +56,15 @@ struct GameManager{
     auto& getActualMap(){
         return actual_lvl;
     }
+    int getActualLvl(){
+        return num_lvl_actual;
+    }
+    void nextLvl(){
+        num_lvl_actual++;
+    }
+    void resetLvl(){
+        num_lvl_actual = 0;
+    }
     Entity& createObject(EntityManager& EM, int obj){
         Entity& entity = EM.createEntity();
         entity.addTag(Tags::object);
@@ -263,6 +272,7 @@ struct GameManager{
                                         };
     int random_lvl[SIZELVL][SIZELVL]{};
     int actual_lvl[SIZELVL][SIZELVL]{};
+    int num_lvl_actual{};
     //PLAYER
     void createPlayer(EntityManager& EM, int x, int y){
         auto& player = EM.createEntity();

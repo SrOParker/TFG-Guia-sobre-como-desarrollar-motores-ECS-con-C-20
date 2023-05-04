@@ -23,7 +23,6 @@ struct Game{
     CollisionSystem collSys{};
     IASystem iaSys{};
     States state{States::MENU};
-    int   lvlActual     = 0;
     bool  playing_lvl   = false;
     bool  turn          = true;
     float time          = 0.25;

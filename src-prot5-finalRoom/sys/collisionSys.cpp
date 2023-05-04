@@ -1,7 +1,7 @@
 #include "collisionSys.hpp"
 
 
-void CollisionSystem::update(EntityManager& EM, GameManager& GM, bool& playing_lvl, States& state, int& lvlActual){
+void CollisionSystem::update(EntityManager& EM, GameManager& GM, bool& playing_lvl, States& state){
     EM.forallMatching([&](Entity& e){
         auto& posCMPOfCollider = EM.getCMPStorage().getPositionCMP(e);
         if(posCMPOfCollider.velX!=0 || posCMPOfCollider.velY!=0){
@@ -19,7 +19,7 @@ void CollisionSystem::update(EntityManager& EM, GameManager& GM, bool& playing_l
                     }else if(e.hasTag(Tags::player) && coll.hasTag(Tags::key)){
                         collisionWithKey(EM, GM, e, coll);
                     }else if(e.hasTag(Tags::player | Tags::has_key) && coll.hasTag(Tags::door)){
-                        collisionWithDoor(playing_lvl, lvlActual);
+                        collisionWithDoor(GM,playing_lvl);
                     }
                 }
 
@@ -146,11 +146,17 @@ void CollisionSystem::collisionWithKey(EntityManager& EM, GameManager& GM, Entit
     posKey.posX =  16;
     posKey.posY =   0;
     player.addTag(Tags::has_key);
+
+    EM.forallMatching([&](Entity& door){
+        auto& rend_door = EM.getCMPStorage().getRenderCMP(door);
+        rend_door.actual_frame++;
+        rend_door.frame = {(float)(rend_door.actual_frame*32), 0,(float)32, (float)rend_door.sprite.height};
+    }, 0, Tags::door);
 }
 
-void CollisionSystem::collisionWithDoor(bool& playing_lvl, int& lvlActual){
+void CollisionSystem::collisionWithDoor(GameManager& GM, bool& playing_lvl){
     //go to other lvl
     std::cout<< "Charging lvl2"<<"\n";
-    lvlActual++;
+    GM.nextLvl();
     playing_lvl = false;
 }

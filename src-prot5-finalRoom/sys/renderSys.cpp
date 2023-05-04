@@ -1,7 +1,9 @@
 #include "renderSys.hpp"
-void RenderSystem::update(EntityManager& EM, Map& map){
+void RenderSystem::update(EntityManager& EM, GameManager& GM, Map& map){
     renderMap(map);
+    
     if(EM.getEntityVector().size()>0){
+        renderRound(GM);
         renderStatsInterface(EM, map);
         renderObjects(EM);
     }
@@ -77,4 +79,14 @@ void RenderSystem::renderMenu(Map& map){
     (float)(0),
     (float)(0),
     WHITE);
+}
+
+void RenderSystem::renderRound(GameManager& GM){
+    //draw text
+    std::ostringstream stream;
+    stream << "Round: "<< GM.getActualLvl();
+    std::string str = stream.str();
+    const char* pointsString = str.c_str();
+    Color color{112,154,209,255};
+    DrawText(pointsString, 15, 576, 20, color);
 }
