@@ -41,7 +41,7 @@ void CollisionSystem::collisionWithWall(EntityManager& EM, GameManager& GM, Enti
         auto& posWall = EM.getCMPStorage().getPositionCMP(wall);
         statsWall.health -= statsPlayer.pickaxe;
         rendWall.actual_frame++;
-        rendWall.frame = {(float)(rendWall.actual_frame*32), 0,(float)32, (float)rendWall.sprite.height};
+        rendWall.frame = {static_cast<float>(rendWall.actual_frame*32), 0,static_cast<float>(32), static_cast<float>(rendWall.sprite.height)};
         if(statsWall.health <= 0){
             //Eliminar Entidad
             GM.getActualMap()[posWall.posY][posWall.posX] = 0;
@@ -139,7 +139,7 @@ void CollisionSystem::collisionWithChest(EntityManager& EM, GameManager& GM, Ent
     //CAMBIAR SPRITE DEL COFRE Y HACERLO INACCESIBLE
     auto& rendChest = EM.getCMPStorage().getRenderCMP(chest);
     rendChest.actual_frame++;
-    rendChest.frame = {(float)(rendChest.actual_frame*32), 0,(float)32, (float)rendChest.sprite.height};
+    rendChest.frame = {static_cast<float>(rendChest.actual_frame*32), 0,static_cast<float>(32), static_cast<float>(rendChest.sprite.height)};
     chest.addTag(Tags::object_picked);
 }
 
@@ -153,7 +153,7 @@ void CollisionSystem::collisionWithKey(EntityManager& EM, GameManager& GM, Entit
     EM.forallMatching([&](Entity& door){
         auto& rend_door = EM.getCMPStorage().getRenderCMP(door);
         rend_door.actual_frame++;
-        rend_door.frame = {(float)(rend_door.actual_frame*32), 0,(float)32, (float)rend_door.sprite.height};
+        rend_door.frame = {static_cast<float>(rend_door.actual_frame*32), 0,static_cast<float>(32), static_cast<float>(rend_door.sprite.height)};
     }, 0, Tags::door);
 }
 

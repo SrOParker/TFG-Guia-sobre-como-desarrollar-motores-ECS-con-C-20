@@ -21,7 +21,7 @@ struct GameManager{
         }, ObjectCMP::mask, Tags::object);
     }
     void chargeInventory(EntityManager& EM){
-        for(int i = 0; i < (int)inventory.size(); i++){
+        for(std::size_t i = 0; i < inventory.size(); i++){
             auto& player = EM.getPlayer();
             auto& player_stats = EM.getCMPStorage().getStatsCMP(player);
             auto& obj = createObject(EM, inventory[i]);

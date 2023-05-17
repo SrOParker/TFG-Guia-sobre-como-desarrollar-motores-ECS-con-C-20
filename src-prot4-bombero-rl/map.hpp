@@ -4,23 +4,23 @@
 
 struct Background{
     Texture2D sprite = LoadTexture("img/background.png");
-    Rectangle box    = {0,0, (float)sprite.width, (float)sprite.height};
+    Rectangle box    = {0,0, static_cast<float>(sprite.width), static_cast<float>(sprite.height)};
 };
 struct Wall1{
     Texture2D sprite = LoadTexture("img/pared1.png");
-    Rectangle box    = {0,0, (float)sprite.width, (float)sprite.height};
+    Rectangle box    = {0,0, static_cast<float>(sprite.width), static_cast<float>(sprite.height)};
 };
 struct Wall2{
     Texture2D sprite = LoadTexture("img/pared2.png");
-    Rectangle box    = {0,0, (float)sprite.width, (float)sprite.height};
+    Rectangle box    = {0,0, static_cast<float>(sprite.width), static_cast<float>(sprite.height)};
 };
 struct NoFire{
     Texture2D sprite = LoadTexture("img/edificio-dentro.png");
-    Rectangle box    = {0,0, (float)sprite.width, (float)sprite.height};
+    Rectangle box    = {0,0, static_cast<float>(sprite.width), static_cast<float>(sprite.height)};
 };
 struct Rope{
     Texture2D sprite = LoadTexture("img/cuerda.png");
-    Rectangle box    = {0,0, (float)sprite.width, (float)sprite.height};
+    Rectangle box    = {0,0, static_cast<float>(sprite.width), static_cast<float>(sprite.height)};
 };
 
 struct Map{

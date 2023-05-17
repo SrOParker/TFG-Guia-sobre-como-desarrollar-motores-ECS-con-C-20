@@ -26,7 +26,7 @@ struct Map{
     Menu      menu;
     Map(){
         map = LoadTexture("sprites/background_interface.png");
-        size_map = {0,0, (float)map.width, (float)map.height};
+        size_map = {0,0, static_cast<float>(map.width), static_cast<float>(map.height)};
 
         interface.health    = LoadTexture("sprites/vida.png");
         interface.damage    = LoadTexture("sprites/ataque.png");

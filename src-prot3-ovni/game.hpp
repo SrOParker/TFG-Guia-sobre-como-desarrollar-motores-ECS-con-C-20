@@ -80,7 +80,7 @@ struct Game{
         enemy.phy.value().position.second = 20 + (rand()%370);
         enemy.phy.value().velocity.first = (-1) * (8 + rand() % 15);
         enemy.rend.value().sprite = LoadTexture("img/enemy.png");
-        enemy.rend.value().box = {0,0, (float)enemy.rend.value().sprite.width, (float)enemy.rend.value().sprite.height};
+        enemy.rend.value().box = {0,0, static_cast<float>(enemy.rend.value().sprite.width), static_cast<float>(enemy.rend.value().sprite.height)};
         
     } 
 

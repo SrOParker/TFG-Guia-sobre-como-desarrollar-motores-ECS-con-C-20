@@ -19,7 +19,7 @@ void Game::createEntitiesForFirefighterGameRL(){
 }
 
 bool Game::checkRooms(bool& ending){
-    for(int i =0 ; i<(int)EM.getEntityVector().size()-1;i++){
+    for(std::size_t i =0 ; i<EM.getEntityVector().size()-1;i++){
         if(EM.getEntityVector()[i+1].room.fire > 9){
             ending = true;   
             return true; 

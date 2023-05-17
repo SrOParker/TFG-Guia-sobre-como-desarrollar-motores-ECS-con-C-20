@@ -23,8 +23,8 @@ void RenderSystem::update(EntityManager& EM, GameManager& GM, Map& map){
 void RenderSystem::renderMap(Map& map){
 
     DrawTexture(map.map,
-    (float)(0),
-    (float)(0),
+    0,
+    0,
     WHITE);
 
 }
@@ -32,34 +32,34 @@ void RenderSystem::renderMap(Map& map){
 void RenderSystem::renderStatsInterface(EntityManager& EM, Map& map){
     
     auto& statsPlayer = EM.getCMPStorage().getStatsCMP(EM.getPlayer());
-    DrawTexture(map.interface.health, (float)(SPRITE_DIMENSIONS/2), 
-                (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*1), WHITE);
+    DrawTexture(map.interface.health, static_cast<float>(SPRITE_DIMENSIONS/2), 
+                static_cast<float>(VERTICAL_BORDER+SPRITE_DIMENSIONS*1), WHITE);
     for (int i=0;i<statsPlayer.maxhealth; i++){
         if(i < statsPlayer.health){
-            DrawTexture(map.interface.point, (float)(SPRITE_DIMENSIONS+20) + i*10, (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*1.45), WHITE);
+            DrawTexture(map.interface.point, static_cast<float>(SPRITE_DIMENSIONS+20) + i*10, static_cast<float>(VERTICAL_BORDER+SPRITE_DIMENSIONS*1.45), WHITE);
         }else{
-            DrawTexture(map.interface.pointVoid, (float)(SPRITE_DIMENSIONS+20) + i*10, (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*1.45), WHITE);
+            DrawTexture(map.interface.pointVoid, static_cast<float>(SPRITE_DIMENSIONS+20) + i*10, static_cast<float>(VERTICAL_BORDER+SPRITE_DIMENSIONS*1.45), WHITE);
         }
     }
-    DrawTexture(map.interface.damage, (float)(SPRITE_DIMENSIONS/2), 
-                (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*2.5)), WHITE);
+    DrawTexture(map.interface.damage, static_cast<float>(SPRITE_DIMENSIONS/2), 
+                static_cast<float>(VERTICAL_BORDER+(SPRITE_DIMENSIONS*2.5)), WHITE);
     for (int i=0; i<statsPlayer.damage; i++){
-        DrawTexture(map.interface.point, (float)(SPRITE_DIMENSIONS+20) + i*10, (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*2.95), WHITE);
+        DrawTexture(map.interface.point, static_cast<float>(SPRITE_DIMENSIONS+20) + i*10, static_cast<float>(VERTICAL_BORDER+SPRITE_DIMENSIONS*2.95), WHITE);
     }
-    DrawTexture(map.interface.step, (float)(SPRITE_DIMENSIONS/2), 
-                (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*4)), WHITE);
+    DrawTexture(map.interface.step, static_cast<float>(SPRITE_DIMENSIONS/2), 
+                static_cast<float>(VERTICAL_BORDER+(SPRITE_DIMENSIONS*4)), WHITE);
     for (int i=0; i<statsPlayer.step; i++){
-        DrawTexture(map.interface.point, (float)(SPRITE_DIMENSIONS+20) + i*10, (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*4.45), WHITE);
+        DrawTexture(map.interface.point, static_cast<float>(SPRITE_DIMENSIONS+20) + i*10, static_cast<float>(VERTICAL_BORDER+SPRITE_DIMENSIONS*4.45), WHITE);
     }
-    DrawTexture(map.interface.pickaxe, (float)(SPRITE_DIMENSIONS/2), 
-                (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*5.5)), WHITE);
+    DrawTexture(map.interface.pickaxe, static_cast<float>(SPRITE_DIMENSIONS/2), 
+                static_cast<float>(VERTICAL_BORDER+(SPRITE_DIMENSIONS*5.5)), WHITE);
     for (int i=0; i<statsPlayer.pickaxe; i++){
-        DrawTexture(map.interface.point, (float)(SPRITE_DIMENSIONS+20) + i*10, (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*5.95), WHITE);
+        DrawTexture(map.interface.point, static_cast<float>(SPRITE_DIMENSIONS+20) + i*10, static_cast<float>(VERTICAL_BORDER+SPRITE_DIMENSIONS*5.95), WHITE);
     }
-    DrawTexture(map.interface.critical, (float)(SPRITE_DIMENSIONS/2), 
-                (float)(VERTICAL_BORDER+(SPRITE_DIMENSIONS*7)), WHITE);
+    DrawTexture(map.interface.critical, static_cast<float>(SPRITE_DIMENSIONS/2), 
+                static_cast<float>(VERTICAL_BORDER+(SPRITE_DIMENSIONS*7)), WHITE);
     for (int i=0; i<statsPlayer.critical_hit; i+=5){
-        DrawTexture(map.interface.point, (float)(SPRITE_DIMENSIONS+20) + (i/5)*10, (float)(VERTICAL_BORDER+SPRITE_DIMENSIONS*7.45), WHITE);
+        DrawTexture(map.interface.point, static_cast<float>(SPRITE_DIMENSIONS+20) + (i/5)*10, static_cast<float>(VERTICAL_BORDER+SPRITE_DIMENSIONS*7.45), WHITE);
     }
 }
 
@@ -71,8 +71,8 @@ void RenderSystem::renderObjects(EntityManager& EM){
         auto& object = e;
         auto& objectRender = EM.getCMPStorage().getRenderCMP(object);
         DrawTexture(objectRender.sprite, 
-                (float)((HORIZONTAL_BORDER+HORIZONTAL_MIDDLE + (SPRITE_DIMENSIONS+SPRITE_DIMENSIONS/2 - 3) + (SPRITE_DIMENSIONS*nextCol))), 
-                (float)((VERTICAL_BORDER+(SPRITE_DIMENSIONS*nextRow))), 
+                static_cast<float>((HORIZONTAL_BORDER+HORIZONTAL_MIDDLE + (SPRITE_DIMENSIONS+SPRITE_DIMENSIONS/2 - 3) + (SPRITE_DIMENSIONS*nextCol))), 
+                static_cast<float>((VERTICAL_BORDER+(SPRITE_DIMENSIONS*nextRow))), 
                 WHITE);
         nextCol++;
     }, RenderCMP::mask, Tags::object);
@@ -80,8 +80,8 @@ void RenderSystem::renderObjects(EntityManager& EM){
 
 void RenderSystem::renderMenu(Map& map){
     DrawTexture(map.menu.initial_Menu,
-    (float)(0),
-    (float)(0),
+    0,
+    0,
     WHITE);
 }
 
@@ -99,8 +99,8 @@ void RenderSystem::renderRound(GameManager& GM){
 
 void RenderSystem::renderEndGame(Map& map){
     DrawTexture(map.menu.endgame,
-    (float)(0),
-    (float)(0),
+    0,
+    0,
     WHITE);
 }
 
@@ -108,8 +108,8 @@ void RenderSystem::renderCritHit(Map& map, GameManager& GM){
     float pos_X = (HORIZONTAL_BORDER - 16)+ GM.posx_crit * SPRITE_DIMENSIONS;
     float pos_Y = VERTICAL_BORDER + GM.posy_crit * SPRITE_DIMENSIONS;
     DrawTexture(map.interface.crit_text,
-    (float)(pos_X),
-    (float)(pos_Y),
+    static_cast<float>(pos_X),
+    static_cast<float>(pos_Y),
     WHITE);
     GM.critHit++;
     if (GM.critHit>25){
@@ -119,7 +119,7 @@ void RenderSystem::renderCritHit(Map& map, GameManager& GM){
 
 void RenderSystem::renderWiki(EntityManager& EM, Map& map){
     float y{1.2f};
-    DrawTexture(map.menu.wiki, (float)(0),(float)(0),WHITE);
+    DrawTexture(map.menu.wiki, 0, 0,WHITE);
     EM.forall([&](Entity&e){
         auto& render = EM.getCMPStorage().getRenderCMP(e); 
         float pos_X  = HORIZONTAL_BORDER/3 + SPRITE_DIMENSIONS;

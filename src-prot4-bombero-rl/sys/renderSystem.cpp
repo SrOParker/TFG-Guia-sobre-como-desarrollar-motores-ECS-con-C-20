@@ -13,7 +13,7 @@ void RenderSystem::update(EntityManager& EM, Map& map, int score){
     DrawTextureRec(map.background.sprite,map.background.box,(Vector2){0,0}, WHITE);
 
     //draw player
-    for(int i=0; i < (int)EM.getEntityVector().size() - 1 ; i++){
+    for(std::size_t i=0; i < EM.getEntityVector().size() - 1 ; i++){
         if(player.movement.yPos==i){
             DrawTextureRec(player.render.sprite, player.render.box, (Vector2){0,player.movement.yPos*row_size},WHITE);
         }else if(player.movement.yPos>i){

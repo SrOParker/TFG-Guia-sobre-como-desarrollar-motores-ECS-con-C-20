@@ -7,8 +7,8 @@ void CollisionSystem::update(EntityManager& EM, Map& map, States& state){
             e.coll.value().boundingBox = {
             e.phy.value().position.first, 
             e.phy.value().position.second, 
-            (float)e.rend.value().sprite.width, 
-            (float)e.rend.value().sprite.height
+            static_cast<float>(e.rend.value().sprite.width), 
+            static_cast<float>(e.rend.value().sprite.height)
             };
             if(e.id != player.id){
                 bool collision = CheckCollisionRecs(player.coll.value().boundingBox,e.coll.value().boundingBox);
@@ -25,7 +25,7 @@ void CollisionSystem::collisionWithEnemy(EntityManager& EM, Map& map, States& st
     state = States::end;
     map.setMapSpeed( 0.0f );
 
-    for(int i=0; i<(int)EM.getEntityVector().size();i++){
+    for(std::size_t i=0; i<EM.getEntityVector().size();i++){
         EM.getEntityVector()[i].phy.value().velocity.first = 0;
     }
 }

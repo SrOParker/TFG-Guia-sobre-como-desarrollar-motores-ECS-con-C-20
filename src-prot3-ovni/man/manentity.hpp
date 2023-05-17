@@ -23,7 +23,7 @@ struct EntityManager{
     }
 
     void removeAllEntities(){
-        for(int i = 0;i < (int)entities.size();i++){
+        for(std::size_t i = 0;i < entities.size();i++){
             UnloadTexture(entities[i].rend.value().sprite);
             removeEntity(entities[i].id);
         }entities.clear();
