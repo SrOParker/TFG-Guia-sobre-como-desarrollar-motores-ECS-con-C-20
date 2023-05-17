@@ -54,20 +54,20 @@ struct DescriptionCMP{
 };
 
 struct Tags{
-    static int const player         {0b00000000000001};
-    static int const enemy          {0b00000000000010};
-    static int const wall           {0b00000000000100};
-    static int const movement       {0b00000000001000};
-    static int const collider       {0b00000000010000};
-    static int const collisionable  {0b00000000100000};
-    static int const ghost          {0b00000001000000};
-    static int const soldier        {0b00000010000000};
-    static int const chest          {0b00000100000000};
-    static int const object         {0b00001000000000};
-    static int const object_picked  {0b00010000000000};    
-    static int const key            {0b00100000000000};
-    static int const door           {0b01000000000000};
-    static int const has_key        {0b10000000000000};
+    static const int player         {0b00000000000001};
+    static const int enemy          {0b00000000000010};
+    static const int wall           {0b00000000000100};
+    static const int movement       {0b00000000001000};
+    static const int collider       {0b00000000010000};
+    static const int collisionable  {0b00000000100000};
+    static const int ghost          {0b00000001000000};
+    static const int soldier        {0b00000010000000};
+    static const int chest          {0b00000100000000};
+    static const int object         {0b00001000000000};
+    static const int object_picked  {0b00010000000000};    
+    static const int key            {0b00100000000000};
+    static const int door           {0b01000000000000};
+    static const int has_key        {0b10000000000000};
 };
 
 enum Objects{
