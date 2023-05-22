@@ -61,6 +61,7 @@ struct MovementSystem{
         int tecla = drawer.wait4NextKeyPress();
         auto& player = EM.getEntityVector()[0];
         switch(tecla){
+            
             case 119: // up w
                 if(player.movement.yPos != 0){
                     player.movement.yPos -=1;

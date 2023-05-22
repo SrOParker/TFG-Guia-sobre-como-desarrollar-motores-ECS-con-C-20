@@ -1,6 +1,6 @@
 CC = g++
 CFLAGS = -std=c++20 -Wall -Wextra #-fsanitize=address
-LDFLAGS = -lraylib #-fsanitize=address
+LDFLAGS = -L./lib -Wl,-rpath=./lib -lraylib #-fsanitize=address
 
 SOURCES = main.cpp game.cpp man/entity.cpp cmp/renderComponent.cpp  sys/movementSystem.cpp sys/renderSystem.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
