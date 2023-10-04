@@ -1,8 +1,0 @@
-Enlaces a mirar
-
-https://xbloom.io/2017/04/11/a-small-header-only-c-ecs-library/
-
-https://www.gamedev.net/articles/programming/general-and-gameplay-programming/the-entity-component-system-c-game-design-pattern-part-1-r4803/
-
-https://github.com/jslee02/awesome-entity-component-system
-

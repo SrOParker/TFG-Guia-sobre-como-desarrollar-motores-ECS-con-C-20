@@ -1,9 +1,0 @@
-- Estado del arte 
-	. Introduccion
-	. Antecedentes
-	. Tecnologías a aplicar
-- Marco teórico
-	. ¿Por qué se necesita estructurar los datos?
-	. ¿Qué es un ECS?
-		+Partes del ECS
-	. Estructura Slotmap, almacenamiento de datos
